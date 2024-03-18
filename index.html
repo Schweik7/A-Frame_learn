@@ -1,26 +1,22 @@
 <html>
 
 <head>
-  <title>Community Components Example</title>
-  <meta name="description" content="Community Components Example">
-  <script src="aframe.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@a5a8449/dist/aframe-particle-system-component.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aframe-simple-sun-sky@^1.2.2/simple-sun-sky.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@d5f3f8/dist/aframe-extras.min.js"></script>
+    <title>Community Components Example</title>
+    <meta name="description" content="Community Components Example">
+    <script src="aframe.js"></script>
+    <script src="aframe-event-set-component.js"></script>
+    <script src="my_js.js"></script>
 </head>
-
 <body>
-  <script>
-    AFRAME.registerComponent('hello-world', {
-      init: function () {
-        console.log('Hello, World!');
-      }
-    });</script>
+    <a-scene>
+        <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"
+            event-set__enter="_event: mouseenter; color: #8FF7FF; _function:log"
+            event-set__leave="_event: mouseleave; color: #4CC3D9"></a-box>
 
-  <a-scene>
-    <a-entity hello-world></a-entity>
-  </a-scene>
+        <a-camera>
+            <a-cursor></a-cursor>
+        </a-camera>
+    </a-scene>
 </body>
 
 </html>
