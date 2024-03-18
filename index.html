@@ -4,22 +4,32 @@
     <title>Community Components Example</title>
     <meta name="description" content="Community Components Example">
     <script src="aframe.js"></script>
-    <script src="aframe-event-set-component.js"></script>
+    <script src="./components/aframe-event-set-component.js"></script>
     <script src="my_js.js"></script>
 </head>
 
 <body>
     <a-scene>
-        <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"
-            event-set__enter="_event: mouseenter; _target: #cylinderText; visible: true"
-            event-set__leave="_event: mouseleave; _target: #cylinderText; visible: false">
-            <a-text id="cylinderText" value="This is a cylinder" align="center" color="#FFF" visible="false"
-                position="0 -0.55 0.55" geometry="primitive: plane; width: 1.75" material="color: #333"></a-text>
-        </a-cylinder>
+        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"
+            event-set__down="_event: mousedown; material.wireframe: true"
+            event-set__up="_event: mouseup; material.wireframe: false"
+            event-set__leave="_event: mouseleave; material.wireframe: false"></a-plane>
+
 
         <a-camera>
             <a-cursor></a-cursor>
         </a-camera>
+
+            <a-assets>
+              <!-- <a-asset-item id="cityModel" src="./models/VC.gltf"></a-asset-item> -->
+              <a-asset-item id="cityModel" src="./models/virtualcity/VC.gltf"></a-asset-item>
+            </a-assets>
+            <a-entity gltf-model="#cityModel" modify-materials></a-entity>
+
+        <a-entity pico-controls="hand: left"></a-entity>
+        <a-entity pico-controls="hand: right"></a-entity>
+        <a-entity hand-controls="left"></a-entity>
+        <a-entity hand-controls="right"></a-entity>
     </a-scene>
 </body>
 
