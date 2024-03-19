@@ -34,7 +34,7 @@ AFRAME.registerComponent('event-set', {
         // 初始化事件处理器和事件名称为null。
         this.eventHandler = null;
         this.eventName = null;
-        console.log("event-set init");
+        // console.log("event-set init");
     },
 
     // 在组件的数据更新时调用，移除旧的事件监听器，并添加新的。
@@ -42,7 +42,7 @@ AFRAME.registerComponent('event-set', {
         this.removeEventListener();
         this.updateEventListener();
         this.addEventListener();
-        console.log("event-set update");
+        // console.log("event-set update");
     },
 
     // 组件被移除时调用，用于清理，比如移除事件监听器。

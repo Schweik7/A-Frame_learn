@@ -17,3 +17,5 @@ AFRAME.registerComponent('modify-materials', {
       });
     }
   });
+
+var sceneEl = document.querySelector('a-scene');
