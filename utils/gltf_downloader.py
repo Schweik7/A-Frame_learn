@@ -41,7 +41,7 @@ def download_gltf_and_resources(gltf_url, save_directory):
             if 'uri' in image:
                 image_url = os.path.join(gltf_url.rsplit('/', 1)[0], fix_url_path(image['uri']))
                 download_file(image_url, save_directory)
-
+# 用于下载公开模型
 if __name__ == "__main__":
     gltf_url = input("Enter the URL of the GLTF file: ") or "https://cdn.aframe.io/test-models/models/glTF-2.0/virtualcity/VC.gltf"
     save_directory = "./models/virtualcity"
