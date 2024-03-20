@@ -6,12 +6,22 @@
     <script src="aframe.js"></script>
     <script src="./components/aframe-event-set-component.js"></script>
     <script src="./components/aframe-keyboard-controll-controller.js"></script>
+    <script src="./components/aframe-text-geometry-component.js"></script>
+    <!-- 提示THREE.FontLoader is not a constructor -->
     <script src="my_js.js"></script>
     <!-- <script src="./components/aframe-motion-capture-components.js"></script> avatar-recorder属性放在a-scene内部-->
 </head>
 
 <body>
-    <a-scene  inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #222">
+    <a-scene  inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
+    <a-assets>
+      <a-mixin
+        id="marker"
+        geometry="primitive: plane; width: 0.02; height: 0.02"
+        material="color: red"
+      ></a-mixin>
+      <a-asset-item id="myFont" src="./fonts/LXGW_WenKai_Bold.json"></a-asset-item>
+    </a-assets>
         <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"
             event-set__down="_event: mousedown; material.wireframe: true"
             event-set__up="_event: mouseup; material.wireframe: false"
@@ -23,17 +33,11 @@
             <a-cursor></a-cursor>
         </a-camera>
 
-            <!-- <a-assets> -->
-              <!-- <a-asset-item id="cityModel" src="./models/virtualcity/VC.gltf"></a-asset-item> -->
-            <!-- </a-assets> -->
+            <!-- <a-assets>
+              <a-asset-item id="cityModel" src="./models/virtualcity/VC.gltf"></a-asset-item>
+            </a-assets> -->
             <!-- <a-entity gltf-model="#cityModel" modify-materials></a-entity> -->
-            <a-assets>
-                <a-mixin
-                  id="marker"
-                  geometry="primitive: plane; width: 0.02; height: 0.02"
-                  material="color: red"
-                ></a-mixin>
-              </a-assets>
+
         
               <a-entity mixin="marker" position="-2.5 0.7 0.01"></a-entity>
         
@@ -52,8 +56,7 @@
                         animation="property: scale; to: 4 2 6; dir: alternate; loop: true"
                         text="color: white; align: center; value: Animating size; width: 1.5">
               </a-entity>
-        
-              <!-- Anchors. -->
+              <a-entity text-geometry="value: 你好，世界;font: #myFont"></a-entity>
               <a-entity mixin="marker" position="-2.5 1 0.01"></a-entity>
               <a-entity position="-2.5 1 0"
                         text="anchor: left; width: 1.5; color: white; value: [LEFT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
