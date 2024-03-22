@@ -19,3 +19,22 @@ AFRAME.registerComponent('modify-materials', {
   });
 
 var sceneEl = document.querySelector('a-scene');
+
+AFRAME.registerComponent('scale-on-mouseenter', {  
+  schema: {  
+    to: {default: '3 3 3', type: 'vec3'}  
+  },  
+
+  init: function () {  
+    var data = this.data;
+    console.log(data);  
+    var el = this.el;
+    var old_scale = el.object3D.scale.clone();  
+    this.el.addEventListener('mouseenter', function () {  
+      el.object3D.scale.copy(data.to);// 提升性能
+    });  
+    this.el.addEventListener('mouseleave', function () {  
+      el.object3D.scale.copy(old_scale);  
+    });  
+  }  
+});  

@@ -1,40 +1,41 @@
 <html>
 
 <head>
-    <title>Community Components Example</title>
-    <meta name="description" content="Community Components Example">
-    <script src="aframe.js"></script>
-    <script src="./components/aframe-event-set-component.js"></script>
-    <script src="./components/aframe-keyboard-controll-controller.js"></script>
-    <script src="./components/aframe-text-geometry-component.js"></script>
-    <script src="./components/aframe-environment-component.js"></script>
-  
-    <!-- 提示THREE.FontLoader is not a constructor -->
-    <script src="my_js.js"></script>
-    <!-- <script src="./components/aframe-motion-capture-components.js"></script> avatar-recorder属性放在a-scene内部-->
+  <title>Community Components Example</title>
+  <meta name="description" content="Community Components Example">
+  <script src="aframe.js"></script>
+  <script src="./components/aframe-event-set-component.js"></script>
+  <script src="./components/aframe-keyboard-controll-controller.js"></script>
+  <script src="./components/aframe-text-geometry-component.js"></script>
+  <script src="./components/aframe-environment-component.js"></script>
+
+  <!-- 提示THREE.FontLoader is not a constructor -->
+  <script src="my_js.js"></script>
+  <!-- <script src="./components/aframe-motion-capture-components.js"></script> avatar-recorder属性放在a-scene内部-->
 </head>
 
 <body>
-    <a-scene  inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
-      <!-- <a-box color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2"></a-box> -->
-      <a-box src="res/box的细胞纹理.jpeg" position="0 2 -5" rotation="0 45 45"
-      scale="2 2 2"></a-box>
-        <a-entity text="value: Hello World;"></a-entity>
-        <a-entity environment="preset: forest; dressingAmount: 100"></a-entity>
-        <a-camera>
-            <!-- <a-entity cursor></a-entity>  -->
-            <a-cursor></a-cursor>
-        </a-camera>
-              <a-entity position="0 1.8 2">
-                <a-entity camera look-controls wasd-controls></a-entity>
-              </a-entity>
-        <a-entity pico-controls="hand: left" id="primaryHand"></a-entity>
-        <a-entity pico-controls="hand: right" id="secondaryHand"></a-entity>
-        <!-- <a-entity hand-controls="left"></a-entity>
-        <a-entity hand-controls="right"></a-entity> -->
-        
-    </a-scene>
+  <a-scene inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
+    <a-assets>
+      <img id="boxTexture" src="./res/box的细胞纹理.jpeg">
+      <img id="skyTexture" src="./res/黑夜背景纹理.jpg">
+      <img id="groundTexture" src="./res/floor.jpg">
+      <audio src="./res/backgroundnoise.wav" autoplaypreload></audio>
+    </a-assets>
+
+    <a-box src="#boxTexture" position="0 2 -5" rotation="0 45 45" scale="2 2 2"
+      animation="property: object3D.position.y; to: 2.2; dir: alternate; dur: 2000; loop: true"
+      scale-on-mouseenter="to: 4 4 4"></a-box>
+
+    <a-sky src="#skyTexture"></a-sky>
+    <a-camera>
+      <a-cursor></a-cursor>
+    </a-camera>
+    <!-- <a-light type="ambient" color="#445451"></a-light> -->
+    <!-- <a-light type="point" intensity="2" position="2 4 4"></a-light> -->
+    <!-- <a-sky src="#skyTexture"></a-sky> -->
+
+  </a-scene>
 </body>
 
 </html>
-
