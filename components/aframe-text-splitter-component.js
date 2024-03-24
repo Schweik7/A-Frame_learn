@@ -5,6 +5,7 @@ AFRAME.registerComponent("text-splitter", {
 
         // wait until the text component tells us that it's ready
         this.el.addEventListener("object3dset", function objectset(evt) {
+            console.log(this.el,"object3dset", evt);
             el.removeEventListener("object3dset", objectset); // react only once
 
             const mesh = el.getObject3D("text") // grab the mesh
