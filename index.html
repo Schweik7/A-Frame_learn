@@ -15,27 +15,37 @@
 </head>
 
 <body>
-  <a-scene inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
-    <a-assets>
-      <img id="boxTexture" src="./res/box的细胞纹理.jpeg">
-      <img id="skyTexture" src="./res/黑夜背景纹理.jpg">
-      <img id="groundTexture" src="./res/floor.jpg">
-      <audio src="./res/backgroundnoise.wav" autoplaypreload></audio>
-    </a-assets>
-
-    <a-box src="#boxTexture" position="0 2 -5" rotation="0 45 45" scale="2 2 2"
-      animation="property: object3D.position.y; to: 2.2; dir: alternate; dur: 2000; loop: true"
-      scale-on-mouseenter="to: 4 4 4"></a-box>
-
-    <a-sky src="#skyTexture"></a-sky>
-    <a-camera>
-      <a-cursor></a-cursor>
-    </a-camera>
-    <!-- <a-light type="ambient" color="#445451"></a-light> -->
-    <!-- <a-light type="point" intensity="2" position="2 4 4"></a-light> -->
-    <!-- <a-sky src="#skyTexture"></a-sky> -->
-
-  </a-scene>
+    <a-scene>
+        <a-assets>
+          <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+      
+          <!-- Images. -->
+          <img id="city" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/city.jpg">
+          <img id="city-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-city.jpg">
+          <img id="cubes" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/cubes.jpg">
+          <img id="cubes-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-cubes.jpg">
+          <img id="sechelt" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg">
+          <img id="sechelt-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-sechelt.jpg">
+        </a-assets>
+      
+        <!-- 360-degree image. -->
+        <a-sky id="image-360" radius="10" src="#city"></a-sky>
+      
+        <!-- Link template we will build. -->
+        <a-entity class="link"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: #cubes-thumb"
+        sound="on: click; src: #click-sound"></a-entity>
+      
+        <!-- Camera + Cursor. -->
+        <a-camera>
+          <a-cursor
+            id="cursor"
+            animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; easing: easeInCubic; dur: 150; startEvents: click"
+            animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
+            animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"></a-cursor>
+        </a-camera>
+      </a-scene>
 </body>
 
 </html>
