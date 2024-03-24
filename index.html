@@ -7,108 +7,94 @@
     <script src="./components/aframe-event-set-component.js"></script>
     <script src="./components/aframe-keyboard-controll-controller.js"></script>
     <script src="./components/aframe-text-geometry-component.js"></script>
-    <script src="./components/aframe-text-splitter-component.js"></script>
-    <script src="./components/aframe-text-timeline-component.js"></script>
-    <script src="./components/anime.js"></script>
     <script src="my_js.js"></script>
+    <script src="./components/aframe-text-animation-component.js"></script>
+
     <!-- <script src="./components/aframe-motion-capture-components.js"></script> avatar-recorder属性放在a-scene内部-->
 </head>
 
 <body>
-    <a-scene  inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
-    <a-assets>
-      <a-mixin
-        id="marker"
-        geometry="primitive: plane; width: 0.02; height: 0.02"
-        material="color: red"
-      ></a-mixin>
-      <a-asset-item id="myFont" src="./fonts/LXGW_WenKai_Bold.json"></a-asset-item>
-    </a-assets>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"
-            event-set__down="_event: mousedown; material.wireframe: true"
-            event-set__up="_event: mouseup; material.wireframe: false"
-            event-set__leave="_event: mouseleave; material.wireframe: false"></a-plane>
-
+    <a-scene stat inspector="url: http://localhost:5500/components/aframe-inspector.min.js" background="color: #135">
+        <a-assets>
+            <a-asset-item id="myFont" src="./fonts/LXGW_WenKai_Lite_Regular.json"></a-asset-item>
+        </a-assets>
         <a-camera>
             <!-- <a-entity cursor></a-entity>  -->
             <a-cursor></a-cursor>
         </a-camera>
 
-            <!-- <a-assets>
-              <a-asset-item id="cityModel" src="./models/virtualcity/VC.gltf"></a-asset-item>
-            </a-assets> -->
-            <!-- <a-entity gltf-model="#cityModel" modify-materials></a-entity> -->
-            <!-- <a-text position="-0.5 1.6 -2" value="splitter HelloXX World!" text-splitter text-timeline></a-text> -->
-        
-              <a-entity mixin="marker" position="-2.5 0.7 0.01"></a-entity>
-        
-              <!-- Animations. -->
-              <a-entity id="opacity" position="-2.5 0.7 0"
-                        animation="property: components.text.material.uniforms.opacity.value; to: 0; dir: alternate; loop: true"
-                        text="color: white; align: center; value: Animating opacity; width: 1.5">
-              </a-entity>
-              <a-entity mixin="marker" position="0 0.7 0.01"></a-entity>
-              <a-entity id="color" position="0 0.7 0"
-                        animation="property: components.text.material.uniforms.color.value; type: color; to: red; dir: alternate; loop: true"
-                        text="color: white; align: center; value: Animating color; width: 1.5">
-              </a-entity>
-              <a-entity mixin="marker" position="2.5 0.7 0.01"></a-entity>
-              <a-entity id="size" position="2.5 0.7 0"
-                        animation="property: scale; to: 4 2 6; dir: alternate; loop: true"
-                        text="color: white; align: center; value: Animating size; width: 1.5">
-              </a-entity>
-              <a-entity text-sequence="text:你好，世界; font:#myFont" position="-2 1 -5"></a-entity>
-              <a-entity text-geometry="value: 你好，世界;font: #myFont"   text-splitter></a-entity>
-              <a-entity mixin="marker" position="-2.5 1 0.01"></a-entity>
-              <a-entity position="-2.5 1 0"
-                        text="anchor: left; width: 1.5; color: white; value: [LEFT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
-              </a-entity>
-              <a-entity mixin="marker" position="0 1 0.01"></a-entity>
-              <a-entity position="0 1 0"
-                        text="anchor: center; width: 1.5; color: white; value: [CENTER ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
-              </a-entity>
-              <a-entity mixin="marker" position="2.5 1 0.01"></a-entity>
-              <a-entity position="2.5 1 0"
-                        text="anchor: right; width: 1.5; color: white; value: [RIGHT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
-              </a-entity>
-        
-              <!-- Spacing. -->
-              <a-entity mixin="marker" position="-1 2.5 0.01"></a-entity>
-              <a-entity position="-1 2.5 0"
-                        text="width: 2; color: white; value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
-              </a-entity>
-        
-              <a-entity mixin="marker" position="-1 2 0.01"></a-entity>
-              <a-entity position="-1 2 0"
-                        text="width: 2; lineHeight: 50; letterSpacing: 5; color: white; value: [LINE AND LETTER SPACING] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
-              </a-entity>
-        
-              <!-- Alignments. -->
-              <a-entity position="2 2 0">
-                <a-entity mixin="marker" position="0 0 0.01"></a-entity>
-                <a-entity position="0 0 0" geometry="primitive: plane; width: auto; height: auto" material="color: #333"
-                          text="color: yellow; align: left; value: [LEFT ALIGNED]; width: 2; ">
-                </a-entity>
-                <a-entity mixin="marker" position="0 0.2 0.01"></a-entity>
-                <a-entity position="0 0.2 0" geometry="primitive: plane; width: auto; height: auto" material="color: #333"
-                          text="color: red; align: right; value: [RIGHT ALIGNED]; width: 2; ">
-                </a-entity>
-                <a-entity mixin="marker" position="0 0.4 0.01"></a-entity>
-                <a-entity position="0 0.4 0" geometry="primitive: plane; width: auto; height: auto" material="color: #eee"
-                          text="color: blue; align: center; value: [CENTER ALIGNED]; width: 2; ">
-                </a-entity>
-              </a-entity>
-        
-              <a-entity position="0 1.8 2">
-                <a-entity camera look-controls wasd-controls></a-entity>
-              </a-entity>
+        <a-entity mixin="marker" position="-2.5 0.7 0.01"></a-entity>
+
+        <!-- Animations. -->
+        <a-entity id="opacity" position="-2.5 0.7 0"
+            animation="property: components.text.material.uniforms.opacity.value; to: 0; dir: alternate; loop: true"
+            text="color: white; align: center; value: Animating opacity; width: 1.5">
+        </a-entity>
+        <a-entity mixin="marker" position="0 0.7 0.01"></a-entity>
+        <a-entity id="color" position="0 0.7 0"
+            animation="property: components.text.material.uniforms.color.value; type: color; to: red; dir: alternate; loop: true"
+            text="color: white; align: center; value: Animating color; width: 1.5">
+        </a-entity>
+        <a-entity mixin="marker" position="2.5 0.7 0.01"></a-entity>
+        <a-entity id="size" position="2.5 0.7 0" animation="property: scale; to: 4 2 6; dir: alternate; loop: true"
+            text="color: white; align: center; value: Animating size; width: 1.5">
+        </a-entity>
+
+
+        <a-entity
+            text-animation="text: 计算机图形学中用于字体渲染和其他图形渲染的技术，特别是在需要高效率和可扩展性时。位图字体在放大时变模糊的问题在实现细节和渲染效果上有所不同; font: #myFont; fontSize: 0.5 ; color: green; charsPerLine: 10; indent: 2; _function: textAnimation; position: -3 2 -7; letterSpacing: 0.2; lineHeight: 1.5;"></a-entity>
+
+
+
+        <a-entity mixin="marker" position="-2.5 1 0.01"></a-entity>
+        <a-entity position="-2.5 1 0"
+            text="anchor: left; width: 1.5; color: white; value: [LEFT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
+        </a-entity>
+        <a-entity mixin="marker" position="0 1 0.01"></a-entity>
+        <a-entity position="0 1 0"
+            text="anchor: center; width: 1.5; color: white; value: [CENTER ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
+        </a-entity>
+        <a-entity mixin="marker" position="2.5 1 0.01"></a-entity>
+        <a-entity position="2.5 1 0"
+            text="anchor: right; width: 1.5; color: white; value: [RIGHT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
+        </a-entity>
+
+        <!-- Spacing. -->
+        <a-entity mixin="marker" position="-1 2.5 0.01"></a-entity>
+        <a-entity position="-1 2.5 0"
+            text="width: 2; color: white; value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
+        </a-entity>
+
+        <a-entity mixin="marker" position="-1 2 0.01"></a-entity>
+        <a-entity position="-1 2 0"
+            text="width: 2; lineHeight: 50; letterSpacing: 5; color: white; value: [LINE AND LETTER SPACING] Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam">
+        </a-entity>
+
+        <!-- Alignments. -->
+        <a-entity position="2 2 0">
+            <a-entity mixin="marker" position="0 0 0.01"></a-entity>
+            <a-entity position="0 0 0" geometry="primitive: plane; width: auto; height: auto" material="color: #333"
+                text="color: yellow; align: left; value: [LEFT ALIGNED]; width: 2; ">
+            </a-entity>
+            <a-entity mixin="marker" position="0 0.2 0.01"></a-entity>
+            <a-entity position="0 0.2 0" geometry="primitive: plane; width: auto; height: auto" material="color: #333"
+                text="color: red; align: right; value: [RIGHT ALIGNED]; width: 2; ">
+            </a-entity>
+            <a-entity mixin="marker" position="0 0.4 0.01"></a-entity>
+            <a-entity position="0 0.4 0" geometry="primitive: plane; width: auto; height: auto" material="color: #eee"
+                text="color: blue; align: center; value: [CENTER ALIGNED]; width: 2; ">
+            </a-entity>
+        </a-entity>
+
+        <a-entity position="0 1.8 2">
+            <a-entity camera look-controls wasd-controls></a-entity>
+        </a-entity>
         <a-entity pico-controls="hand: left" id="primaryHand"></a-entity>
         <a-entity pico-controls="hand: right" id="secondaryHand"></a-entity>
         <!-- <a-entity hand-controls="left"></a-entity>
         <a-entity hand-controls="right"></a-entity> -->
-        
+
     </a-scene>
 </body>
 
 </html>
-
