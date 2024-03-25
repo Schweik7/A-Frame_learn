@@ -25193,7 +25193,7 @@ class AEntity extends ANode {
       object3D = new Constructor();
       this.setObject3D(type, object3D);
     }
-    warn('`getOrCreateObject3D` has been deprecated. Use `setObject3D()` ' + 'and `object3dset` event instead.');
+    // warn('`getOrCreateObject3D` has been deprecated. Use `setObject3D()` ' + 'and `object3dset` event instead.');
     return object3D;
   }
 

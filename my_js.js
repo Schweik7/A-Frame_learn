@@ -41,13 +41,13 @@ AFRAME.registerComponent('scale-on-mouseenter', {
 
 function textAnimation(textEl, index, position, data) {
   // 设置初始位置
+  var baseDelay = 6000; // 基础延迟时间，单位为毫秒
   textEl.object3D.position.set(position.x, position.y, position.z);
   var delay= data.delay? data.delay : 10;
   // 设置动画
   textEl.setAttribute('animation', {
     property: 'material.opacity',
     to: 1,
-    // dur: 7000,
-    delay: delay * index*20
+    delay: delay * index*20+baseDelay,
   });
 }
