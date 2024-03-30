@@ -1,0 +1,36 @@
+{
+  "name": "a-frame_learn",
+  "version": "1.0.0",
+  "description": "my AFrame Scene!",
+  "scripts": {
+    "start-fastapi": "uvicorn main:app --reload",
+    "start-frontend": "webpack-dev-server --mode development",
+    "start-aframe": "parcel serve ./src/index.html --port 5500 --log-level verbose --open --no-cache",
+    "start": "pnpm run start-frontend & pnpm run start-fastapi",
+    "build": "webpack --mode production",
+    "build-aframe": "parcel build ./src/index.html --dist-dir build --no-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Schweik7/A-Frame_learn.git"
+  },
+  "keywords": [
+    "aframe",
+    "js",
+    "ts"
+  ],
+  "author": "Schweik7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Schweik7/A-Frame_learn/issues"
+  },
+  "homepage": "https://github.com/Schweik7/A-Frame_learn#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  }
+}

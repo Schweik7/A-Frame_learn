@@ -1,7 +1,12 @@
-function log(componentInstance) {
-  console.log("Hello World from log");
-}
-
+// import AFRAME from './components/aframe';
+import './components/aframe';
+import './components/aframe-text-animation-component';
+import './components/aframe-event-set-component';
+import './components/aframe-keyboard-controll-controller';
+import './components/text-geometry/index';
+import './components/text-sequence';
+// "@types/aframe": "^1.2.6",
+console.log("my code is starting");
 AFRAME.registerComponent('modify-materials', {
   init: function () {
     // Wait for model to load.
@@ -49,3 +54,4 @@ function textAnimation(textEl, index, position, data) {
     });
   }, index * 200 + baseDelay); // 延迟确保逐字显示的效果
 }
+console.log("my code is running");
