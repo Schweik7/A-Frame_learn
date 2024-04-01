@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "my AFrame Scene!",
   "scripts": {
-    "start-fastapi": "uvicorn main:app --reload",
-    "start-aframe": "snowpack dev --no-hmr",
-    "start": "pnpm run start-fastapi & pnpm run start-aframe"
+    "fastapi": "uvicorn backend.main:app --reload",
+    "aframe": "snowpack dev --no-hmr",
+    "start": "pnpm run fastapi & pnpm run aframe"
   },
   "repository": {
     "type": "git",
