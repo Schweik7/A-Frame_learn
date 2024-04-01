@@ -1,10 +1,22 @@
-// import AFRAME from './components/aframe';
 import './components/aframe';
+import './components/text-geometry';
 import './components/aframe-text-animation-component';
 import './components/aframe-event-set-component';
 import './components/aframe-keyboard-controll-controller';
-import './components/text-geometry/index';
-import './components/text-sequence';
+
+function textAnimation(textEl, index, position, data) {
+  const baseDelay = 500; // 基础延迟
+  setTimeout(() => {
+    textEl.setAttribute('animation', {
+      property: 'material.opacity',
+      to: 1,
+      dur: 500
+    });
+  }, index * 200 + baseDelay); // 延迟确保逐字显示的效果
+}
+window.textAnimation = textAnimation;
+
+
 // "@types/aframe": "^1.2.6",
 console.log("my code is starting");
 AFRAME.registerComponent('modify-materials', {
@@ -44,14 +56,14 @@ AFRAME.registerComponent('scale-on-mouseenter', {
   }
 });
 
-function textAnimation(textEl, index, position, data) {
-  const baseDelay = 500; // 基础延迟
-  setTimeout(() => {
-    textEl.setAttribute('animation', {
-      property: 'material.opacity',
-      to: 1,
-      dur: 500
-    });
-  }, index * 200 + baseDelay); // 延迟确保逐字显示的效果
-}
-console.log("my code is running");
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('aframe-scene.html')
+      .then(response => response.text())
+      .then(data => {
+          document.body.innerHTML += data;
+      })
+      .catch(error => console.error('Error loading the A-Frame scene:', error));
+});

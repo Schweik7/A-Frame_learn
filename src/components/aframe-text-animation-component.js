@@ -1,3 +1,32 @@
+console.log('aframe-text-animation-component.js loaded');
+function parsePosition(position) {
+    // 如果position已经是一个对象，直接返回它
+    if (typeof position === 'object' && position !== null) {
+      return position;
+    }
+  
+    // 如果position是一个字符串，尝试解析它
+    if (typeof position === 'string') {
+      // 将字符串分割为数组，基于空格
+      const parts = position.split(/\s+/);
+      if (parts.length === 3) {
+        // 将字符串数组的每个部分转换为浮点数
+        const x = parseFloat(parts[0]);
+        const y = parseFloat(parts[1]);
+        const z = parseFloat(parts[2]);
+  
+        // 检查转换后的x, y, z是否为有效数字
+        if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
+          return { x, y, z };
+        }
+      }
+    }
+
+    // 如果输入无法解析为有效的位置对象，抛出错误或返回null/默认值
+    console.error('Invalid position value:', position);
+    return null; // 或者根据需要提供一个默认位置对象
+  }
+  
 AFRAME.registerComponent('text-animation', {
     schema: {
         text: { type: 'string' },
@@ -21,9 +50,11 @@ AFRAME.registerComponent('text-animation', {
         let currentLine = 0;
         let charIndex = 0;
         let index = 0; 
+        let position = data.position;
 
         const animateText = () => {
-            if (index >= characters.length) return; // if all characters have been animated, exit function
+            // data.position = parsePosition(data.position);// 从第二次执行开始，这个data.position可能会从字典变成原始的字符串，导致后续执行错误
+            if (index >= characters.length) return; 
             const char = characters[index];
             if (charIndex >= data.charsPerLine || (currentLine === 0 && charIndex >= data.charsPerLine - data.indent)) {
                 currentLine++;
@@ -35,9 +66,9 @@ AFRAME.registerComponent('text-animation', {
                 z: 0
             };
             const curPosition = {
-                x: data.position.x + deltaPosition.x,
-                y: data.position.y + deltaPosition.y,
-                z: data.position.z + deltaPosition.z
+                x: position.x + deltaPosition.x,
+                y: position.y + deltaPosition.y,
+                z: position.z + deltaPosition.z
             };
             const textEl = document.createElement('a-entity');
             textEl.setAttribute('text-geometry', {
@@ -53,7 +84,7 @@ AFRAME.registerComponent('text-animation', {
             if (functionName && typeof window[functionName] === 'function') {
                 window[functionName](textEl, index, curPosition, data);
             }
-            else { console.log('no function provided'); }
+            else { console.log('no function provided,expected ', functionName); }
            el.appendChild(textEl);
             charIndex++;
             index++; 

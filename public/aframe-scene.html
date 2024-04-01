@@ -1,0 +1,16 @@
+<a-scene stats inspector="url: http://localhost:5500/dist/components/aframe-inspector.min.js" background="color: #135">
+    <a-assets>
+        <a-asset-item id="myFont" src="fonts/LXGW_WenKai_Lite_Regular.json"></a-asset-item>
+    </a-assets>
+    <a-camera>
+        <a-cursor></a-cursor>
+    </a-camera>
+
+    <a-entity
+        text-animation="text: 计算机图形学中用于字体渲染和其他图形渲染的技术，特别是在需要高效率和可扩展性时。位图字体在放大时变模糊的问题在实现细节和渲染效果上有所不同; font: #myFont; fontSize: 0.5 ; color: white; charsPerLine: 10; indent: 2; letterSpacing: 0.2; lineHeight: 1.5; _function: textAnimation; position: -3 2 -7; "></a-entity>
+    <a-entity position="0 1.8 2">
+        <a-entity camera look-controls wasd-controls></a-entity>
+    </a-entity>
+    <a-entity pico-controls="hand: left" id="primaryHand"></a-entity>
+    <a-entity pico-controls="hand: right" id="secondaryHand"></a-entity>
+</a-scene>

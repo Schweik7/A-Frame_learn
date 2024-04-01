@@ -33154,9 +33154,7 @@
               // This is the rendering engine, such as THREE.js so copy over any persistent properties from the rendering system.
               var renderer = sceneEl.renderer;
 
-              console.log(!data.physicallyCorrectLights);
               renderer.useLegacyLights = !data.physicallyCorrectLights;
-              console.log(renderer);
               renderer.toneMapping = THREE[toneMappingName + 'ToneMapping'];
               THREE.Texture.DEFAULT_ANISOTROPY = data.anisotropy;
               THREE.ColorManagement.enabled = data.colorManagement;

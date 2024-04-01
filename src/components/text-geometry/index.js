@@ -3,6 +3,7 @@
  */
 import './lib/FontLoader.js'
 import './lib/TextGeometry.js'
+console.log('text-geometry component loaded');
 var debug = AFRAME.utils.debug;
 var error = debug('aframe-text-component:error');
 var fontLoader = new THREE.FontLoader();
@@ -28,11 +29,12 @@ AFRAME.registerComponent('text-geometry', {
   update: function (oldData) {
     var data = this.data;
     var el = this.el;
-
+    // console.log("data.font.constructor",data.font.constructor)
     // 检查是否已经缓存了字体
     if (fontCache[data.font]) {
       this.createTextGeometry(fontCache[data.font]);
     } else {
+      console.log('loading font', data.font,"for first time");//事实上，很神奇，同一个字体会被加载两次
       if (data.font.constructor === String) {
         fontLoader.load(data.font, (response) => {
           fontCache[data.font] = response; // 缓存加载的字体
