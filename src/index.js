@@ -54,12 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const answerText = document.createElement('a-entity');
           answerText.id = "answer" + index;
           panel.appendChild(answerText);
+          panel.addEventListener('textAnimationEnd', (event) => {});
           answerText.addEventListener('textAnimationEnd', (event) => {
+            console.log("listened!", answerText.id);
             const { nextPosition, nextEl } = event.detail;
             console.log("nextEl", nextEl,"this id", this.id);
             if(answerText.id ==nextEl){
               let nextEl = "answer" + (index+1);
-              console.log("listened", answerText.id);
               // 使用计算好的下一个位置，发送信号给将下一个答案的id
               textEl.setAttribute('text-animation', { text: answer.answer, color: '#F00', font: '#myFont', _function: 'textAnimation', signalTarget: nextEl, 'position': nextPosition });
             }
