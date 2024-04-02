@@ -21,3 +21,4 @@ def get_quez(id: int):
 @app.post("/choice/{id}")
 def upload_choice(id: int, choice: int):
     with Session(engine) as session:
+        pass
