@@ -110,25 +110,15 @@ async function fetchData() {
         console.error('Failed to fetch data:', error);
     }
 }
+const answer1_entity=document.getElementById('answer0');
 function close2Center(entityEl) {
-    // 获取所有的text-geometry组件
     console.log(entityEl);
     const textGeometries = entityEl.querySelectorAll('[text-geometry]');
-    // 遍历每个text-geometry组件
     textGeometries.forEach(textEl => {
-        // 获取当前位置
         const currentPosition = textEl.getAttribute('position');
-        // 设置动画目标值
-        const targetZ = currentPosition.z - 1; // 假设我们想将Z值减小1
-        // 创建动画属性
+        const targetZ = currentPosition.z + 1; // 假设我们想将Z值减小1
         const animationAttr = `property: position; to: ${currentPosition.x} ${currentPosition.y} ${targetZ}; dur: 1000`; // 持续时间为1000ms
-        // 创建动画元素
-        const animationEl = document.createElement('a-animation');
-        animationEl.setAttribute('attribute', 'position');
-        animationEl.setAttribute('to', `${currentPosition.x} ${currentPosition.y} ${targetZ}`);
-        animationEl.setAttribute('dur', '1000'); // 持续时间1000ms
-        // 将动画元素添加到当前text-geometry组件中
-        textEl.appendChild(animationEl);
+        textEl.setAttribute('animation', animationAttr);
     });
 }
 window.close2Center=close2Center;
