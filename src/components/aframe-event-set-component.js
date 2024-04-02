@@ -84,7 +84,8 @@ AFRAME.registerComponent('event-set', {
         this.eventHandler = function handler() {
             if (functionName && typeof window[functionName] === 'function') {
                 // 如果定义了_function且对应的全局函数存在，则调用该函数
-                window[functionName](self);
+                console.log("event-set callfunctionName:", functionName);
+                window[functionName](el);
             }
             // 现在的data中只包含样式属性，
             Object.keys(data).forEach(function setAttribute(propName) {
@@ -94,7 +95,7 @@ AFRAME.registerComponent('event-set', {
         };
     },
 
-    // !!! 添加事件监听器到当前实体。通过这行代码，将会在mouseenter事件发生时，调用handler，遍历data中定义的属性，并设置到目标实体上。
+    //添加事件监听器到当前实体。通过这行代码，将会在mouseenter事件发生时，调用handler，遍历data中定义的属性，并设置到目标实体上。
     addEventListener: function () {
         this.el.addEventListener(this.eventName, this.eventHandler);
     },

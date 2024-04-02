@@ -26,7 +26,7 @@ let quez_data = {
     ]
 }
 
-function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine,oriPosition) {
+function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
     const baseDelay = 500; // 基础延迟
     setTimeout(() => {
         textEl.setAttribute('animation', {
@@ -35,11 +35,11 @@ function textAnimation(textEl, index, curPosition, data, charLineIndex, currentL
             dur: 500
         });
         if (index == data.text.length) {
-            const { curPosition:cPos,charIndex, currentLine:cLine } = calcPosition(charLineIndex, data, currentLine, index, data.text, oriPosition);
+            const { curPosition: cPos, charIndex, currentLine: cLine } = calcPosition(charLineIndex, data, currentLine, index, data.text, oriPosition);
             let nextEl = data.signalTarget || "";
-            let detail={ nextPosition: cPos, nextEl: nextEl };
-            console.log("Emit textAnimationEnd signal detail", detail);
-            textEl.emit("textAnimationEnd",detail ,true);
+            let detail = { nextPosition: cPos, nextEl: nextEl };
+            // console.log("Emit textAnimationEnd signal detail", detail);
+            textEl.emit("textAnimationEnd", detail, true);
         }
 
     }, index * 4 + baseDelay); // 延迟确保逐字显示的效果
@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const answerText = document.createElement('a-entity');
                     answerText.id = "answer" + index;
                     panel.appendChild(answerText);
+                    answerText.setAttribute('event-set__enter', {
+                        _event:"mouseenter",_function:"close2Center"
+                    })
+                    // answerText.setAttribute('event-set__move', {
+                    //     _event:"mouseenter",_function:"close2Center"
+                    // })
                 });
 
                 panel.addEventListener('textAnimationEnd', (event) => {
@@ -76,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         let text = quez_data.answers[index - 1].answer;
                         let nextTarget = "";
                         if (index < answersLength) nextTarget = "answer" + index;
-                        textEl.setAttribute('text-animation', { text: text, color: '#F00', font: '#myFont', charsPerLine: 15, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition });
+                        textEl.setAttribute('text-animation', {
+                            text: text, color: '#F00', font: '#myFont', charsPerLine: 15, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition
+                        });
                     }
                     else return
                 });
@@ -102,10 +110,28 @@ async function fetchData() {
         console.error('Failed to fetch data:', error);
     }
 }
-
-
-
-
+function close2Center(entityEl) {
+    // 获取所有的text-geometry组件
+    console.log(entityEl);
+    const textGeometries = entityEl.querySelectorAll('[text-geometry]');
+    // 遍历每个text-geometry组件
+    textGeometries.forEach(textEl => {
+        // 获取当前位置
+        const currentPosition = textEl.getAttribute('position');
+        // 设置动画目标值
+        const targetZ = currentPosition.z - 1; // 假设我们想将Z值减小1
+        // 创建动画属性
+        const animationAttr = `property: position; to: ${currentPosition.x} ${currentPosition.y} ${targetZ}; dur: 1000`; // 持续时间为1000ms
+        // 创建动画元素
+        const animationEl = document.createElement('a-animation');
+        animationEl.setAttribute('attribute', 'position');
+        animationEl.setAttribute('to', `${currentPosition.x} ${currentPosition.y} ${targetZ}`);
+        animationEl.setAttribute('dur', '1000'); // 持续时间1000ms
+        // 将动画元素添加到当前text-geometry组件中
+        textEl.appendChild(animationEl);
+    });
+}
+window.close2Center=close2Center;
 
 
 
