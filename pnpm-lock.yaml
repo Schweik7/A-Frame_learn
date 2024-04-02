@@ -16,9 +16,6 @@ devDependencies:
   snowpack:
     specifier: ^3.8.8
     version: 3.8.8
-  super-three:
-    specifier: ^0.163.0
-    version: 0.163.0
   ts-loader:
     specifier: ^9.5.1
     version: 9.5.1(typescript@5.4.3)(webpack@5.91.0)
@@ -4951,10 +4948,6 @@ packages:
   /strip-final-newline@2.0.0:
     resolution: {integrity: sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==}
     engines: {node: '>=6'}
-    dev: true
-
-  /super-three@0.163.0:
-    resolution: {integrity: sha512-gf2qa7QQ4FZcejz/i7uZKvsojk0PbrqAT57z6h5BDkvDllqe9xkJ9qez2KNky+QueCi4PvqAOMPtNrF7qxrG+g==}
     dev: true
 
   /supports-color@5.5.0:
