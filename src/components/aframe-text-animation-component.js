@@ -74,7 +74,7 @@ AFRAME.registerComponent('text-animation', {
         // window.cur_pos = curPosition; 
         if (data.signalTarget)
         {
-          let detail={ nextPosition: curPosition,nextEl:data.signalTarget};
+          let detail={ nextPosition: curPosition,nextEl:data.signalTarget,originEl:el};
           console.log("emit signal","detail:",detail);
           el.emit('textAnimationEnd', detail,true);
         }

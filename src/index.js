@@ -47,28 +47,43 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(response => response.text())
     .then(data => {
       document.body.innerHTML += data;
-
+      // const box=document.getElementById('interactive-box');box.emit('textAnimationEnd',{},true);
+      // monitorEvents(element, 'myCustomEvent');
       function createText(data) {
         const panel = document.getElementById('text-panel');
+        const answersLength = quez_data.answers.length;
         quez_data.answers.forEach((answer, index) => {
           const answerText = document.createElement('a-entity');
           answerText.id = "answer" + index;
           panel.appendChild(answerText);
-          panel.addEventListener('textAnimationEnd', (event) => {});
+
           answerText.addEventListener('textAnimationEnd', (event) => {
-            console.log("listened!", answerText.id);
-            const { nextPosition, nextEl } = event.detail;
-            console.log("nextEl", nextEl,"this id", this.id);
-            if(answerText.id ==nextEl){
-              let nextEl = "answer" + (index+1);
+            console.log("nextEl", nextEl, "this id", this.id);
+            if (answerText.id == nextEl) {
+              let nextEl = "answer" + (index + 1);
               // 使用计算好的下一个位置，发送信号给将下一个答案的id
-              textEl.setAttribute('text-animation', { text: answer.answer, color: '#F00', font: '#myFont', _function: 'textAnimation', signalTarget: nextEl, 'position': nextPosition });
+
             }
           });
         });
+        panel.addEventListener('textAnimationEnd', (event) => {
+          const { nextPosition, nextEl, origin } = event.detail;
+          let textEl = document.getElementById(nextEl);
+
+          if (textEl) {
+            let parts = nextEl.split("answer");
+            let index = parseInt(parts[1], 10) + 1;
+            let text=quez_data.answers[index-1].answer;
+            console.log("text", text);
+            let nextTarget="";
+            if (index < answersLength)  nextTarget = "answer" + index;
+            textEl.setAttribute('text-animation', { text: text, color: '#F00', font: '#myFont',charsPerLine:15,indent:0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition });
+          }
+          else return
+        });
 
         const questionText = document.createElement('a-entity');
-        questionText.setAttribute('text-animation', { text: quez_data.quez.question_type + ': ' + quez_data.quez.question, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0" });// 当问题展示完毕后，发送信号给第一个答案
+        questionText.setAttribute('text-animation', { text: quez_data.quez.question_type + ': ' + quez_data.quez.question,charsPerLine:15, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0" });// 当问题展示完毕后，发送信号给第一个答案
         panel.appendChild(questionText);
       }
       createText(data);
