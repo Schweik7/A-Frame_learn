@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Schweik7/A-Frame_learn#readme",
   "devDependencies": {
+    "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "snowpack": "^3.8.8",
     "ts-loader": "^9.5.1",

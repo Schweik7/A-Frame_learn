@@ -72,10 +72,12 @@ AFRAME.registerComponent('event-set', {
         var event = data._event;
         var target = data._target;
         var functionName = data._function; // 新增：用于指定要调用的函数名
-        delete data._event; 
+        var params = data._params; // 新增：用于传递给函数的参数
+        delete data._event;
         delete data._target;
         delete data._function;
-        var self=this;
+        delete data._params;
+        var self = this;
 
         // 确定目标实体，是当前实体还是场景中的其他实体。
         var targetEl = target ? el.sceneEl.querySelector(target) : el;
@@ -84,8 +86,10 @@ AFRAME.registerComponent('event-set', {
         this.eventHandler = function handler() {
             if (functionName && typeof window[functionName] === 'function') {
                 // 如果定义了_function且对应的全局函数存在，则调用该函数
-                console.log("event-set callfunctionName:", functionName);
-                window[functionName](el);
+                if (params)
+                    window[functionName](el, params);
+                else
+                    window[functionName](el);
             }
             // 现在的data中只包含样式属性，
             Object.keys(data).forEach(function setAttribute(propName) {

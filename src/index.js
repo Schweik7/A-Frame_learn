@@ -3,6 +3,7 @@ import './components/text-geometry';
 import './components/aframe-text-animation-component';
 import './components/aframe-event-set-component';
 import './components/aframe-keyboard-controll-controller';
+import axios from 'axios';
 // import { v4 as uuid4 } from 'uuid';
 let quez_data = {
     "quez": {
@@ -25,9 +26,10 @@ let quez_data = {
         }
     ]
 }
-
+window.originalPositions = {}; // 用于存储原始位置的对象
 function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
     const baseDelay = 500; // 基础延迟
+    originalPositions[textEl.getAttribute('id')] = curPosition;
     setTimeout(() => {
         textEl.setAttribute('animation', {
             property: 'material.opacity',
@@ -65,11 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     answerText.id = "answer" + index;
                     panel.appendChild(answerText);
                     answerText.setAttribute('event-set__enter', {
-                        _event:"mouseenter",_function:"close2Center"
-                    })
-                    // answerText.setAttribute('event-set__move', {
-                    //     _event:"mouseenter",_function:"close2Center"
-                    // })
+                        _event: "mouseenter", _function: "close2Center"
+                    });
+                    answerText.setAttribute('event-set__leave', {
+                        _event: "mouseleave", _function: "return2Original"
+                    });
+                    answerText.isAnimating = false;
+                    answerText.setAttribute("background", { color: "#000"});
                 });
 
                 panel.addEventListener('textAnimationEnd', (event) => {
@@ -83,14 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         let nextTarget = "";
                         if (index < answersLength) nextTarget = "answer" + index;
                         textEl.setAttribute('text-animation', {
-                            text: text, color: '#F00', font: '#myFont', charsPerLine: 15, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition
-                        });
+                            text: text, color: '#F00', font: '#myFont', charsPerLine: 15, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition, childID: `answer${index}Char`
+                        });// todo：这里未来要考虑多个问题的情况
+
                     }
                     else return
                 });
-
                 const questionText = document.createElement('a-entity');
-                questionText.setAttribute('text-animation', { text: quez_data.quez.question_type + ': ' + quez_data.quez.question, charsPerLine: 15, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0" });// 当问题展示完毕后，发送信号给第一个答案
+                questionText.id = "question";
+                questionText.setAttribute('text-animation', { text: quez_data.quez.question_type + ': ' + quez_data.quez.question, charsPerLine: 15, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0", childID: "questionChar" });// 当问题展示完毕后，发送信号给第一个答案
                 panel.appendChild(questionText);
             }
             createText(data);
@@ -110,19 +115,79 @@ async function fetchData() {
         console.error('Failed to fetch data:', error);
     }
 }
-const answer1_entity=document.getElementById('answer0');
-function close2Center(entityEl) {
-    console.log(entityEl);
-    const textGeometries = entityEl.querySelectorAll('[text-geometry]');
-    textGeometries.forEach(textEl => {
-        const currentPosition = textEl.getAttribute('position');
-        const targetZ = currentPosition.z + 1; // 假设我们想将Z值减小1
-        const animationAttr = `property: position; to: ${currentPosition.x} ${currentPosition.y} ${targetZ}; dur: 1000`; // 持续时间为1000ms
-        textEl.setAttribute('animation', animationAttr);
-    });
+
+
+
+
+const answer1_entity = document.getElementById('answer0');
+function close2Center(entityEl, targetZ = -3.5, duration = 500) {
+    if (entityEl.isAnimating) return;
+    else {
+        entityEl.isAnimating=true;
+        const textGeometries = entityEl.querySelectorAll('[text-geometry]');
+        textGeometries.forEach(textEl => {
+            const currentPosition = textEl.getAttribute('position');
+            if (currentPosition.z < targetZ) {
+                textEl.setAttribute('animation', `property: position; to: ${currentPosition.x} ${currentPosition.y} ${targetZ}; dur: ${duration}`);
+            }
+        });
+        setTimeout(() => {
+            entityEl.isAnimating = false; // 清除标志，允许再次触发事件
+        }, duration);
+    }
 }
-window.close2Center=close2Center;
+window.close2Center = close2Center;
 
+function return2Original(entityEl, duration = 500) {
+    if (entityEl.isAnimating) return;
+    else {
+        entityEl.isAnimating=true;
+        const textGeometries = entityEl.querySelectorAll('[text-geometry]');
+        textGeometries.forEach(textEl => {
+            const originalPosition = originalPositions[textEl.getAttribute('id')];
+            textEl.setAttribute('animation', `property: position; to: ${originalPosition.x} ${originalPosition.y} ${originalPosition.z}; dur: ${duration}`);
+        });
+        setTimeout(() => {
+            entityEl.isAnimating = false; // 清除标志，允许再次触发事件
+        }, duration);
+    }
+}
+window.return2Original = return2Original;
+window.axios=axios;
 
+// // register
+// axios.post('http://localhost:8000/auth/register', {
+//     email: 'king.arthur@camelot.bt',
+//     password: 'guinevere',
+// })
+// .then((response) => console.log(response))
+// .catch((error) => console.log(error));
 
+// // login 
+// const formData = new FormData();
+// formData.set('username', 'king.arthur@camelot.bt');
+// formData.set('password', 'guinevere');
+// axios.post(
+//     'http://localhost:8000/auth/jwt/login',
+//     formData,
+//     {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//     },
+// )
+// .then((response) => console.log(response))
+// .catch((error) => console.log(error));
 
+// // get profile
+// const TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM';
+// axios.get(
+//     'http://localhost:8000/users/me', {
+//     headers: {
+//         'Authorization': `Bearer ${TOKEN}`,
+//     },
+// })
+// .then((response) => console.log(response))
+// .catch((error) => console.log(error));
+
+// https://fastapi-users.github.io/fastapi-users/10.1/usage/flow/?h=axios

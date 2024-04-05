@@ -1,0 +1,16 @@
+
+###  Request quez
+
+GET http://0.0.0.0:8000/quez/1
+
+
+
+### register
+# 为啥不能发送post请求？
+POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+    "email": "king.arthur@camelot.bt",
+    "password": "guinevere"
+}

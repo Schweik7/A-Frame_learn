@@ -41,6 +41,7 @@ AFRAME.registerComponent('text-animation', {
     curveSegments: { type: 'number', default: 4 },
     height: { type: 'number', default: 0.05 },
     signalTarget: { type: 'string', default: '' },
+    childID: { type: 'string', default: 'child' },
   },
   init: function () {
     let data = this.data;
@@ -71,10 +72,11 @@ AFRAME.registerComponent('text-animation', {
         size: data.fontSize,
         bevelEnabled: false,
         curveSegments: data.curveSegments,
-        height: data.height
+        height: data.height,
       });
       textEl.setAttribute('material', { color: data.color, transparent: true, opacity: 0 });
       textEl.setAttribute('position', curPosition);
+      textEl.id=data.childID+index;
       el.appendChild(textEl);
       charLineIndex++;
       index++;
