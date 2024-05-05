@@ -4,6 +4,20 @@
 GET http://0.0.0.0:8000/quez/1
 
 
+### login
+POST http://localhost:8000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=king.arthur@camelot.bt&password=guinevere
+
+### login2
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+    "username": "king.arthur@camelot.bt",
+    "password": "guinevere"
+}
 
 ### register
 # 为啥不能发送post请求？

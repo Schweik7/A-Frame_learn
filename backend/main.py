@@ -1,7 +1,7 @@
 import fastapi
 from fastapi import Depends
 from fastapi.middleware.cors import CORSMiddleware
-from init_db import engine, QUESTION_TYPES, Quez, Answer
+from init_db import engine, QUESTION_TYPES, Quez, Answer, UserAnswers
 from sqlmodel import SQLModel, Session, select
 from app import (
     auth_backend,
@@ -28,9 +28,9 @@ app = fastapi.FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # 允许访问的域列表
-    allow_credentials=True, # 支持cookies跨域
-    allow_methods=["*"],    # 允许所有方法
-    allow_headers=["*"],    # 允许所有头
+    allow_credentials=True,  # 支持cookies跨域
+    allow_methods=["*"],  # 允许所有方法
+    allow_headers=["*"],  # 允许所有头
 )
 app.include_router(
     fastapi_users.get_auth_router(
@@ -71,14 +71,22 @@ def get_quez(id: int, user: User = Depends(current_user)):
         answers_statement = select(Answer).where(Answer.quez_id == id)
         answers = session.exec(answers_statement).all()
         print(quez, answers)
+    if quez is None:
+        return {"error": "quez not found"}
     return {"quez": quez.dict(), "answers": [answer.dict() for answer in answers]}
-    # return {"quez": quez.dict(),"answers": [answer.dict() for answer in answers]}
 
 
-@app.post("/choice/{id}")
-def upload_choice(id: int, choice: int):
+@app.post("/choice/{quez_id}")
+def upload_choice(
+    quez_id: int, choice_id: int, score: int, user: User = Depends(current_user)
+):
     with Session(engine) as session:
-        pass
+        user_anwer = UserAnswers(
+            user_id=user.id, quez_id=quez_id, choice_id=choice_id, score=score
+        )
+        session.add(user_anwer)
+        session.commit()
+        return {"success": "choice made"}
 
 
 @app.on_event("startup")
@@ -89,4 +97,4 @@ async def on_startup():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", log_level="info", reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", log_level="info", reload=True, port=8000)

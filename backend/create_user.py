@@ -30,4 +30,5 @@ async def create_user(email: str, password: str, is_superuser: bool = False):
 
 
 if __name__ == "__main__":
-  asyncio.run(create_user("weibidewo0@gmail.com", "qweasd123",is_superuser=True))
+    #   asyncio.run(create_user("weibidewo0@gmail.com", "qweasd123",is_superuser=True))
+    asyncio.run(create_user("meng@qq.com", "123456", is_superuser=True))

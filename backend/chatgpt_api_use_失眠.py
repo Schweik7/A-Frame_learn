@@ -56,7 +56,7 @@ df = pd.read_excel(input_file, sheet_name="Sheet1")
 # 也就是说你如果在一个IP下使用多个Key，所有Key的每24小时请求数总和不能超过150；
 # 同理，你如果将一个Key用于多个IP，这个Key的每24小时请求数也不能超过150
 for index, question in tqdm(enumerate(df["问题描述"])):
-    if index < 429:
+    if not 125< index < 429:
         continue
     question = question.strip()
     print(question)
