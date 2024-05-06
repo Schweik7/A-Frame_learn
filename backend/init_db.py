@@ -4,11 +4,10 @@ from loguru import logger
 from datetime import datetime
 from sqlalchemy import Column, CHAR, VARCHAR, BOOLEAN, MetaData, Table, ForeignKey
 
-metadata = MetaData()
 # 定义 user 表
 user_table = Table(
     "user",
-    metadata,
+    SQLModel.metadata,
     Column("id", CHAR(36), primary_key=True),  # 用户唯一标识
     Column("email", VARCHAR(320), nullable=False, unique=True),  # 用户邮箱
     Column("hashed_password", VARCHAR(1024), nullable=False),  # 加密后的密码
