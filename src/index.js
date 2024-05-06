@@ -121,7 +121,7 @@ async function fetchData(quezID = 1) {
         let headersList = {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZTY2MmE4ZC02MWMwLTRkMDAtYThlYy1hMDg0ZjVkODIwN2YiLCJhdWQiOlsiZmFzdGFwaS11c2VyczphdXRoIl19.t_fCuAKL-XRd7O6195KpWW_Ix07dJ3L2uqFL-dyJ230"
+            "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZTY2MmE4ZC02MWMwLTRkMDAtYThlYy1hMDg0ZjVkODIwN2YiLCJhdWQiOlsiZmFzdGFwaS11c2VyczphdXRoIl19.t_fCuAKL-XRd7O6195KpWW_Ix07dJ3L2uqFL-dyJ230"
         }
 
         let response = await fetch(`${backendQuezUrl}/${quezID}`, {
