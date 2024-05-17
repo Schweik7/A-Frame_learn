@@ -1,10 +1,8 @@
-console.log('aframe-text-animation-component.js loaded');
 function parsePosition(position) {
   // 如果position已经是一个对象，直接返回它
   if (typeof position === 'object' && position !== null) {
     return position;
   }
-
   // 如果position是一个字符串，尝试解析它
   if (typeof position === 'string') {
     // 将字符串分割为数组，基于空格
@@ -21,7 +19,6 @@ function parsePosition(position) {
       }
     }
   }
-
   // 如果输入无法解析为有效的位置对象，抛出错误或返回null/默认值
   console.error('Invalid position value:', position);
   return null; // 或者根据需要提供一个默认位置对象

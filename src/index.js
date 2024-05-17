@@ -3,13 +3,15 @@ import './components/text-geometry';
 import './components/aframe-text-animation-component';
 import './components/aframe-event-set-component';
 import './components/aframe-keyboard-controll-controller';
-import { fetchData, textAnimation, changeColor,quezData } from './utils/utils.js';
+import { initRecording } from './utils/recording'; 
+import { fetchData, textAnimation, changeColor,quezData } from './utils/utils';
 // import axios from 'axios';
 // import { v4 as uuid4 } from 'uuid';
 
-let USE_LOCAL_DATA = false; // 是否使用本地数据
+// let USE_LOCAL_DATA = false; // 是否使用本地数据
+let USE_LOCAL_DATA = true;
 let quez_data = null;
-let hoveredAnswer = null;
+
 window.originalPositions = {};
 
 window.textAnimation = textAnimation;
@@ -18,9 +20,11 @@ async function initApplication() {
     const response = await fetch('aframe-scene.html');
     const data = await response.text();
     document.body.innerHTML += data;
-    createText();  // 此函数现在不需要传入data参数
+    createText(quez_data);  // 此函数现在不需要传入data参数
+    // import('./utils/recording').then().catch();
+    initRecording();
 }
-function createText(data) {
+function createText(quez_data) {
     const panel = document.getElementById('text-panel');
     const answersLength = quez_data.answers.length;
     console.log("answersLength", answersLength);

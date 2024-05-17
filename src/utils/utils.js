@@ -1,7 +1,8 @@
 let backendhost = 'http://localhost:8000';
 let backendLoginUrl=`${backendhost}/auth/login`;
 let backendQuezUrl = `${backendhost}/quez`;
-let quezData={
+let hoveredAnswer = null;
+export let quezData={
     "quez": {
         "question": "田田的学习能力不错，但最近发现自己一学习就感到烦躁、无聊和疲惫，没有学习的动力。如果你遇到和田田一样的情况，在面对学习任务时，你最可能有以下哪种行为？",
         "question_type": "身心倦怠型抑郁",
@@ -22,7 +23,7 @@ let quezData={
         }
     ]
 }
-async function fetchData(quezID = 1) {
+export async function fetchData(quezID = 1) {
     try {
         let headersList = {
             "Accept": "*/*",
@@ -43,7 +44,7 @@ async function fetchData(quezID = 1) {
     }
 }
 
-function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
+export function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
     const baseDelay = 500; // 基础延迟
     originalPositions[textEl.getAttribute('id')] = curPosition;
     setTimeout(() => {
@@ -63,7 +64,7 @@ function textAnimation(textEl, index, curPosition, data, charLineIndex, currentL
     }, index * 4 + baseDelay); // 延迟确保逐字显示的效果
 }
 
-function changeColor(entityEl, targetColor) {
+export function changeColor(entityEl, targetColor) {
     hoveredAnswer = entityEl.id;
     const textGeometries = entityEl.querySelectorAll('[text-geometry]');
     textGeometries.forEach(textEl => {
