@@ -83,18 +83,21 @@ AFRAME.registerComponent('event-set', {
         var targetEl = target ? el.sceneEl.querySelector(target) : el;
 
         this.eventName = event;
-        this.eventHandler = function handler() {
+
+        this.eventHandler = function handler(event) {
             if (functionName && typeof window[functionName] === 'function') {
                 // 如果定义了_function且对应的全局函数存在，则调用该函数
                 if (params)
-                    window[functionName](el, params);
+                    window[functionName](targetEl, params);
                 else
-                    window[functionName](el);
+                    window[functionName](targetEl, { eventName: event.type });
             }
-            // 现在的data中只包含样式属性，
-            Object.keys(data).forEach(function setAttribute(propName) {
-                AFRAME.utils.entity.setComponentProperty.call(this, targetEl, propName, data[propName]);
-            });
+            else {
+                // 现在的data中只包含样式属性，
+                Object.keys(data).forEach(function setAttribute(propName) {
+                    AFRAME.utils.entity.setComponentProperty.call(this, targetEl, propName, data[propName]);
+                });
+            }
 
         };
     },

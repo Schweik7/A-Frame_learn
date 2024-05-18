@@ -67,7 +67,7 @@
 	    var i;
 	    var to;
 	    var self = this;
-
+		console.log("init proxy-event:",data,"el",el);
 	    if (data.from) {
 	      if (data.from === 'PARENT') {
 	        from = [el.parentNode];
@@ -91,9 +91,10 @@
 	    } else {
 	      el.addEventListener(data.event, function (evt) {
 	        var data = self.data;
-	        if (!data.enabled) { return; }
-	        if (!data.captureBubbles && evt.target !== el) { return; }
+	        if (!data.enabled) { console.log("evt disabled");  return; }
+	        if (!data.captureBubbles && evt.target !== el) { console.log("evt not captured",evt);  return; }
 	        for (i = 0; i < to.length; i++) {
+			//   console.log("will emit event:",evt,"to",to[i]);
 	          to[i].emit(data.as || data.event, evt['detail'] ? evt.detail : null, data.bubbles);
 	        }
 	      });

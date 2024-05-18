@@ -64,9 +64,15 @@ export function textAnimation(textEl, index, curPosition, data, charLineIndex, c
     }, index * 4 + baseDelay); // 延迟确保逐字显示的效果
 }
 
-export function changeColor(entityEl, targetColor) {
-    hoveredAnswer = entityEl.id;
-    const textGeometries = entityEl.querySelectorAll('[text-geometry]');
+export function changeColor(entityEl, params) {
+    // console.log("changeColor", entityEl.id, params);
+    const { eventName, targetColor }=params;
+    if(targetColor==undefined){
+        if(eventName=='mouseleave') targetColor='#f00';
+        else if (eventName=='mouseenter') targetColor='#ff0';
+    }
+    // hoveredAnswer = entityEl.id;
+    const textGeometries = entityEl.textEl.querySelectorAll('[text-geometry]');
     textGeometries.forEach(textEl => {
         textEl.setAttribute('material', { color: targetColor, transparent: true, opacity: 50 });
     });
