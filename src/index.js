@@ -57,7 +57,7 @@ function createText(quez_data) {
         else return
     });
 
-}
+}                         
 
 document.addEventListener('DOMContentLoaded', () => {
     if (USE_LOCAL_DATA) {
