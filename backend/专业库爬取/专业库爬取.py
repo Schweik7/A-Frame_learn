@@ -52,10 +52,17 @@ def read_json_from_db():
         all_data.append({rowid:json_data})
         # print(json_data)
     return all_data
+
+def get_all_zy():
+    c.execute("SELECT * FROM 专业信息 limit 10")
+    rows = c.fetchall()
+    return rows
 # update_existing_data()
 # exit()
 # dest_url="https://gaokao.chsi.com.cn/zyk/zybk/" # 专业库首页
-crawl=True
+
+
+crawl=False
 
 
 
