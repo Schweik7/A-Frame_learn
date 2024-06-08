@@ -3,6 +3,7 @@ import './components/text-geometry';
 import './components/aframe-text-animation-component';
 import './components/aframe-event-set-component';// 能够通过_target参数实现事件代理
 import './components/aframe-keyboard-controll-controller';
+import './components/aframe-log-all-events';
 // import './components/aframe-proxy-event-component'; // 这个组件的事件代理会emit一个customEvent，不利于代码编写
 import { initRecording } from './utils/recording';
 import { fetchData, textAnimation, changeColor, quezData } from './utils/utils';
@@ -30,6 +31,7 @@ function createText(quez_data) {
     const questionText = document.createElement('a-entity');
     questionText.id = "question";
     questionText.setAttribute('text-animation', { text: quez_data.quez.question, charsPerLine: 20, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0", childID: "questionChar" });// 当问题展示完毕后，发送信号给第一个答案
+    questionText.setAttribute('log-all-events',{debug:false});
     panel.appendChild(questionText);
     quez_data.answers.forEach((answer, index) => {
         const answerText = document.createElement('a-entity');
@@ -54,7 +56,7 @@ function createText(quez_data) {
             });
             mouseEventListen(textEl);
         }
-        else return
+        else return;
     });
 
 }

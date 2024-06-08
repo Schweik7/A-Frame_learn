@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebXR Game</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+</head>
+
+<body>
+  <a-scene>
+    <a-assets>
+      <a-asset-item id="myModel2" src="../models/DSTmodel/island.gltf"></a-asset-item>
+      <a-asset-item id="myModel3" src="../models/DSTmodel/学业成就.gltf"></a-asset-item>
+    </a-assets>
+
+    <!-- <a-sky src="./DSTmodel/star_sky.webp"></a-sky> -->
+    <a-sky color="#CCFFFF"></a-sky>
+    <a-camera id="camera" position="0 1.6 0">
+      <a-cursor></a-cursor>
+    </a-camera>
+
+    <!-- Initial model2 loading -->
+    <a-entity id="model2" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0"></a-entity>
+
+    <!-- Model3 hidden initially -->
+    <a-entity id="model3" gltf-model="#myModel3" position="0 0 -3" rotation="0 0 0" visible="false" set-opacity></a-entity>
+  </a-scene>
+
+  <script>
+
+    // JavaScript to handle model switching
+    document.addEventListener('DOMContentLoaded', function () {
+      var model2 = document.getElementById('model2');
+      var model3 = document.getElementById('model3');
+
+      // Listen for the model-loaded event on model2
+      model2.addEventListener('model-loaded', function () {
+        // Search for the boat inside model2
+        var boat = model2.object3D.getObjectByName('旗帜');
+
+        if (boat) {
+          // Make the boat interactive
+          boat.userData.clickable = true;
+
+          // Add an event listener for click events on the boat
+          boat.addEventListener('click', function () {
+            // Hide model2 and show model3
+            model2.setAttribute('visible', 'false');
+            model3.setAttribute('visible', 'true');
+          });
+
+          // Alternatively, use raycaster for click detection
+          var raycaster = new THREE.Raycaster();
+          var mouse = new THREE.Vector2();
+          window.addEventListener('click', function (event) {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster with the camera and mouse position
+            raycaster.setFromCamera(mouse, model2.sceneEl.camera);
+
+            // Check for intersections with the boat
+            var intersects = raycaster.intersectObject(boat, true);
+            if (intersects.length > 0) {
+              // Hide model2 and show model3
+              model2.setAttribute('visible', 'false');
+              model3.setAttribute('visible', 'true');
+            }
+          });
+        }
+      });
+    });
+
+     // 监听球体的点击事件
+     document.querySelector("#model3").addEventListener("click", function () {
+        document
+          .querySelector("#camera")
+          .setAttribute("position", { x: 0, y: 5, z: -10 });
+      });
+
+    // Function to update the animations
+    function animate() {
+      requestAnimationFrame(animate);
+      TWEEN.update();
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>
