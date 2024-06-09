@@ -30,10 +30,46 @@
     <a-entity id="model2" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0"></a-entity>
 
     <!-- Model3 hidden initially -->
-    <a-entity id="model3" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity focus-on-click></a-entity>
+    <a-entity id="model3" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity
+      focus-on-click></a-entity>
   </a-scene>
 
   <script>
+    class InteractionManager {
+      constructor() {
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.interactiveObjects = [];
+
+        window.addEventListener('click', this.onClick.bind(this));
+      }
+
+      registerObject(object, callback) {
+        this.interactiveObjects.push({ object, callback });
+      }
+
+      onClick(event) {
+        // 计算鼠标在标准化设备坐标中的位置
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // 更新 raycaster 位置
+        const cameraEl = document.querySelector('#camera') || document.querySelector('a-camera');
+        this.raycaster.setFromCamera(this.mouse,cameraEl.sceneEl.camera);
+        // 检查每个注册对象的交集
+        for (let item of this.interactiveObjects) {
+          const intersects = this.raycaster.intersectObject(item.object, true);
+          if (intersects.length > 0) {
+            item.callback();
+            break; // 如果找到交集，则执行回调并退出循环
+          }
+        }
+      }
+    }
+
+    // 创建全局交互管理器实例
+    const interactionManager = new InteractionManager();
+    window.interactionManager = interactionManager;
 
     // JavaScript to handle model switching
     document.addEventListener('DOMContentLoaded', function () {
@@ -49,37 +85,17 @@
           // Make the boat interactive
           boat.userData.clickable = true;
 
-          // Add an event listener for click events on the boat
-          boat.addEventListener('click', function () {
-            // Hide model2 and show model3
+          interactionManager.registerObject(boat, () => {
+            // 隐藏 model2 并显示 model3
             model2.setAttribute('visible', 'false');
             model3.setAttribute('visible', 'true');
           });
 
-          // Alternatively, use raycaster for click detection
-          var raycaster = new THREE.Raycaster();
-          var mouse = new THREE.Vector2();
-          window.addEventListener('click', function (event) {
-            // Calculate mouse position in normalized device coordinates
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            // Update the raycaster with the camera and mouse position
-            raycaster.setFromCamera(mouse, model2.sceneEl.camera);
-
-            // Check for intersections with the boat
-            var intersects = raycaster.intersectObject(boat, true);
-            if (intersects.length > 0) {
-              // Hide model2 and show model3
-              model2.setAttribute('visible', 'false');
-              model3.setAttribute('visible', 'true');
-            }
-          });
         }
       });
     });
 
-     // 监听球体的点击事件
+    // 监听球体的点击事件
     //  document.querySelector("#model3").addEventListener("click", function () {
     //     document
     //       .querySelector("#camera")
