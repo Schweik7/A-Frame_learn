@@ -8,6 +8,9 @@
   <title>WebXR Game</title>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+  <script src="../src/components/aframe-look-at-component.js"></script>
+  <script src="../src/components/aframe-focus-on-click-component.js"></script>
+
 </head>
 
 <body>
@@ -27,7 +30,7 @@
     <a-entity id="model2" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0"></a-entity>
 
     <!-- Model3 hidden initially -->
-    <a-entity id="model3" gltf-model="#myModel3" position="0 0 -3" rotation="0 0 0" visible="false" set-opacity></a-entity>
+    <a-entity id="model3" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity focus-on-click></a-entity>
   </a-scene>
 
   <script>
@@ -77,11 +80,11 @@
     });
 
      // 监听球体的点击事件
-     document.querySelector("#model3").addEventListener("click", function () {
-        document
-          .querySelector("#camera")
-          .setAttribute("position", { x: 0, y: 5, z: -10 });
-      });
+    //  document.querySelector("#model3").addEventListener("click", function () {
+    //     document
+    //       .querySelector("#camera")
+    //       .setAttribute("position", { x: 0, y: 5, z: -10 });
+    //   });
 
     // Function to update the animations
     function animate() {
