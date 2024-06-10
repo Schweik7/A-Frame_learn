@@ -10,6 +10,7 @@ module.exports = {
     public: {url: '/', static: true},
     fonts:{url: '/fonts', static: true},
     res:{url: '/res', static: true},
+    models:{url: '/models', static: true},
   },
   plugins: [
     /* ... */

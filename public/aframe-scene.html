@@ -1,12 +1,25 @@
 <a-scene stats inspector="url: http://localhost:5500/dist/components/aframe-inspector.min.js" background="color: #135">
     <a-assets>
         <a-asset-item id="myFont" src="fonts/LXGW_WenKai_Lite_Regular.json"></a-asset-item>
+        <a-asset-item id="myModel2" src="models/DSTmodel/island.gltf"></a-asset-item>
+        <a-asset-item id="myModel3" src="models/DSTmodel/学业成就.gltf"></a-asset-item>
     </a-assets>
     <a-camera>
         <a-cursor></a-cursor>
     </a-camera>
-    <a-box id="interactive-box" position="-1 0.5 -3" color="#4CC3D9"></a-box>
-    <a-entity id="text-panel" position="0 2 -4">
+    <a-sky color="#CCFFFF"></a-sky>
+    <a-camera id="camera" position="0 1.6 0">
+        <a-cursor></a-cursor>
+    </a-camera>
+
+    <!-- Initial model2 loading -->
+    <a-entity id="model2" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0"></a-entity>
+
+    <!-- Model3 hidden initially -->
+    <a-entity id="model3" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity
+        focus-on-click="moveRelativeTo: camera"></a-entity>
+    <!-- <a-box id="interactive-box" position="-1 0.5 -3" color="#4CC3D9"></a-box> -->
+    <a-entity id="text-panel" position="0 1.6 -4">
         <!-- <a-plane color="#333" opacity="0.8"></a-plane> -->
     </a-entity>
     <a-entity pico-controls="hand: left" id="primaryHand"></a-entity>
@@ -15,4 +28,4 @@
 <div class="button-container" id="buttonContainer" style="display: none;">
     <button id="startButton" class="record-button">开始录制</button>
     <button id="stopButton" class="record-button" style="display: none;">停止录制</button>
-  </div>
+</div>

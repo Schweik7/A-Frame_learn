@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WebXR Game</title>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
   <script src="../src/components/aframe-look-at-component.js"></script>
   <script src="../src/components/aframe-focus-on-click-component.js"></script>
 
@@ -31,7 +30,7 @@
 
     <!-- Model3 hidden initially -->
     <a-entity id="model3" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity
-      focus-on-click></a-entity>
+      focus-on-click="moveRelativeTo: camera"></a-entity>
   </a-scene>
 
   <script>
@@ -44,10 +43,18 @@
         window.addEventListener('click', this.onClick.bind(this));
       }
 
-      registerObject(object, callback) {
+      registerObject(object, callback,priority) {
+        object.userData.priority = priority || 'normal';
         this.interactiveObjects.push({ object, callback });
       }
 
+      unregisterObject(object) {
+        const index = this.interactiveObjects.findIndex(item => item.object === object);
+        if (index >= 0) {
+          this.interactiveObjects.splice(index, 1);
+        }
+      }
+      // 在 Three.js 中，可以直接设置 material 的 raycast 属性来控制 Raycaster 是否检测物体：
       onClick(event) {
         // 计算鼠标在标准化设备坐标中的位置
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -55,13 +62,27 @@
 
         // 更新 raycaster 位置
         const cameraEl = document.querySelector('#camera') || document.querySelector('a-camera');
-        this.raycaster.setFromCamera(this.mouse,cameraEl.sceneEl.camera);
-        // 检查每个注册对象的交集
+        window.cameraEl = cameraEl;
+        this.raycaster.setFromCamera(this.mouse, cameraEl.sceneEl.camera);
+        // 检查每个注册对象的交集，通过调整 Raycaster 的检测顺序，确保较小的按钮在透明物体之前被检测到：
         for (let item of this.interactiveObjects) {
-          const intersects = this.raycaster.intersectObject(item.object, true);
-          if (intersects.length > 0) {
-            item.callback();
-            break; // 如果找到交集，则执行回调并退出循环
+          if (item.object.userData.priority === 'high') {
+            const intersects = this.raycaster.intersectObject(item.object, true);
+            if (intersects.length > 0) {
+              item.callback();
+              return;
+            }
+          }
+        }
+
+        // 再检测其他物体
+        for (let item of this.interactiveObjects) {
+          if (item.object.userData.priority !== 'high') {
+            const intersects = this.raycaster.intersectObject(item.object, true);
+            if (intersects.length > 0) {
+              item.callback();
+              return;
+            }
           }
         }
       }
@@ -73,42 +94,36 @@
 
     // JavaScript to handle model switching
     document.addEventListener('DOMContentLoaded', function () {
-      var model2 = document.getElementById('model2');
-      var model3 = document.getElementById('model3');
+      let model2 = document.getElementById('model2');
+      let model3 = document.getElementById('model3');
 
       // Listen for the model-loaded event on model2
       model2.addEventListener('model-loaded', function () {
         // Search for the boat inside model2
-        var boat = model2.object3D.getObjectByName('旗帜');
-
+        let boat = model2.object3D.getObjectByName('旗帜');
         if (boat) {
           // Make the boat interactive
           boat.userData.clickable = true;
-
           interactionManager.registerObject(boat, () => {
             // 隐藏 model2 并显示 model3
             model2.setAttribute('visible', 'false');
             model3.setAttribute('visible', 'true');
+            let pushButton = model3.object3D.getObjectByName('按压');
+            if (pushButton) {
+              // console.log('找到按压按钮');
+              pushButton.userData.clickable = true;
+              interactionManager.registerObject(pushButton, () => {
+                console.log('按压按钮被点击');
+              },'high');
+            } else {
+              console.log('没有找到按压按钮');
+            }
           });
-
         }
+
+
       });
     });
-
-    // 监听球体的点击事件
-    //  document.querySelector("#model3").addEventListener("click", function () {
-    //     document
-    //       .querySelector("#camera")
-    //       .setAttribute("position", { x: 0, y: 5, z: -10 });
-    //   });
-
-    // Function to update the animations
-    function animate() {
-      requestAnimationFrame(animate);
-      TWEEN.update();
-    }
-
-    animate();
   </script>
 </body>
 
