@@ -1,5 +1,5 @@
 import fastapi
-from fastapi import Depends,Form
+from fastapi import Depends, Form
 from fastapi.middleware.cors import CORSMiddleware
 from init_db import engine, QUESTION_TYPES, Quez, Answer, UserAnswers
 from sqlmodel import SQLModel, Session, select
@@ -21,9 +21,7 @@ current_active_user = fastapi_users.current_user(active=True)
 current_active_verified_user = fastapi_users.current_user(active=True, verified=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
 
-origins = [
-    "http://localhost:5500",
-]
+origins = ["http://localhost:5500", "*"]
 
 app = fastapi.FastAPI()
 app.add_middleware(
@@ -79,22 +77,27 @@ def get_quez(id: int, user: User = Depends(current_user)):
 
 @app.put("/choice/{quez_id}")
 def upload_choice(
-    quez_id: int, answer_id: int=Form(...), score: int=Form(...), user: User = Depends(current_user)
+    quez_id: int,
+    answer_id: int = Form(...),
+    score: int = Form(...),
+    user: User = Depends(current_user),
 ):
-    logger.info(f"User {user.id} chose answer {answer_id} for quez {quez_id},user id:{user.id}")
+    logger.info(
+        f"User {user.id} chose answer {answer_id} for quez {quez_id},user id:{user.id}"
+    )
     with Session(engine) as session:
         # 查询数据库看是否已存在这样的记录
         statement = select(UserAnswers).where(
-            UserAnswers.user_id == str(user.id), # 这里的user.id是UUID
-            UserAnswers.quez_id == quez_id
+            UserAnswers.user_id == str(user.id),  # 这里的user.id是UUID
+            UserAnswers.quez_id == quez_id,
         )
         existing_record = session.exec(statement).first()
-        
+
         if existing_record:
             # 如果记录存在，则更新记录
             existing_record.answer_id = answer_id
             existing_record.score = score
-            existing_record.created_at=datetime.datetime.now()
+            existing_record.created_at = datetime.datetime.now()
             session.commit()
             return {"success": "Choice updated"}
         else:
@@ -105,8 +108,6 @@ def upload_choice(
             session.add(new_user_answer)
             session.commit()
             return {"success": "Choice added"}
-        
-        
 
 
 # @app.on_event("startup")

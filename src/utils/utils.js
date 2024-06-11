@@ -1,8 +1,10 @@
-let backendhost = 'http://localhost:8000';
-let backendLoginUrl=`${backendhost}/auth/login`;
+import { initApplication } from "../index";
+let backendhost = 'http://192.168.1.10:8000';
+let backendLoginUrl = `${backendhost}/auth/jwt/login`;
 let backendQuezUrl = `${backendhost}/quez`;
+export let frontendhost = 'http://192.168.1.10:5500';
 let hoveredAnswer = null;
-export let quezData={
+export let quezData = {
     "quez": {
         "question": "田田的学习能力不错，但最近发现自己一学习就感到烦躁、无聊和疲惫，没有学习的动力。如果你遇到和田田一样的情况，在面对学习任务时，你最可能有以下哪种行为？",
         "question_type": "身心倦怠型抑郁",
@@ -23,13 +25,77 @@ export let quezData={
         }
     ]
 }
+
+export function isLogined() {
+    const authToken = localStorage.getItem('authToken');
+    if (authToken) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export async function login(username, password = "DSTTest") {
+    try {
+        const response = await fetch(backendLoginUrl, {
+            method: 'POST',
+            headers: {
+                "Accept": "*/*",
+                "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                username: `${username}@example.com`,
+                password
+            }).toString(),
+            mode:'cors'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            return data.access_token;
+        } else {
+            if (data.detail === "LOGIN_BAD_CREDENTIALS") {
+                const success = await register(username, password);
+                if (success) {
+                    return await login(username, password);
+                }
+            } else {
+                console.error('Login failed:', data.detail);
+            }
+        }
+    } catch (error) {
+        console.error('Login failed:', error);
+    }
+}
+export async function logout() {
+    const authToken = localStorage.getItem('authToken');
+    let headersList = {
+        "Accept": "*/*",
+        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+        "Authorization": `Bearer ${authToken}`
+    }
+    let response = await fetch(`${backendhost}/auth/jwt/logout`, {
+        method: "post",
+        headers: headersList
+    });
+    console.log(response);
+    if (response.ok) {
+        localStorage.removeItem('authToken');
+        return true;
+    } else {
+        console.error('Failed to logout:', response);
+        return false;
+    }
+}
+
 export async function fetchData(quezID = 1) {
     try {
         const authToken = localStorage.getItem('authToken');
         let headersList = {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-            // "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZTY2MmE4ZC02MWMwLTRkMDAtYThlYy1hMDg0ZjVkODIwN2YiLCJhdWQiOlsiZmFzdGFwaS11c2VyczphdXRoIl19.t_fCuAKL-XRd7O6195KpWW_Ix07dJ3L2uqFL-dyJ230"
             "Authorization": `Bearer ${authToken}`
         }
 
@@ -46,11 +112,12 @@ export async function fetchData(quezID = 1) {
     }
 }
 
-export function initUserAuth(){
+export function initUserAuth() {
     const loginForm = document.getElementById('login-form');
-    const logoutButton = document.getElementById('logout-button');
-    const userInfo = document.getElementById('user-info');
-    const userEmail = document.getElementById('user-email');
+    // const logoutButton = document.getElementById('logout-button');
+    const asciiArt = document.getElementById('ascii-art');
+    // const userInfo = document.getElementById('user-info');
+    // const userEmail = document.getElementById('user-email');
 
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -59,30 +126,20 @@ export function initUserAuth(){
         const token = await login(username, password);
         if (token) {
             localStorage.setItem('authToken', token);
-            loginForm.style.display = 'none';
-            logoutButton.style.display = 'block';
-            userInfo.style.display = 'block';
-            userEmail.innerText = username;
+            loginForm.style.display = 'none'; // 登录成功后隐藏登录表单
+            asciiArt.style.display = 'none';
+            initApplication();
         }
     });
-
-    logoutButton.addEventListener('click', () => {
-        localStorage.removeItem('authToken');
-        loginForm.style.display = 'block';
-        logoutButton.style.display = 'none';
-        userInfo.style.display = 'none';
-    });
-
     const authToken = localStorage.getItem('authToken');
     if (authToken) {
         loginForm.style.display = 'none';
-        logoutButton.style.display = 'block';
-        userInfo.style.display = 'block';
-        userEmail.innerText = 'User'; // 这里你可以通过获取用户信息来设置真实用户名
+        asciiArt.style.display = 'none';
+        initApplication();
     }
 }
 
-export async function register(username, password="DSTTest") {
+export async function register(username, password = "DSTTest") {
     try {
         const response = await fetch(`${backendhost}/auth/register`, {
             method: 'POST',
@@ -98,38 +155,18 @@ export async function register(username, password="DSTTest") {
             })
         });
         const data = await response.json();
-        if (!response.ok) {
-            alert(data.detail);
+        if (!response.ok) { //状态码在 200-299 范围内；创建成功将返回201
+            console.error('Registration failed:', data.detail);
+        }
+        else {
+            console.log('Registration success:', data);
+            return true;
         }
     } catch (error) {
-        console.error('Registration failed:', error);
+        console.error('Registration failed:', error.JSON);
     }
 }
 
-async function login(username, password="DSTTest") {
-    try {
-        const response = await fetch(`${backendLoginUrl}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-            return data.access_token;
-        } else {
-            if (data.detail === "LOGIN_BAD_CREDENTIALS") { // 密码错误或者用户不存在。都选择创建新用户吧
-                await register(username, password);
-                return await login(username, password);
-            } else {
-                alert(data.detail);
-            }
-        }
-    } catch (error) {
-        console.error('Login failed:', error);
-    }
-}
 
 
 export function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
@@ -154,10 +191,10 @@ export function textAnimation(textEl, index, curPosition, data, charLineIndex, c
 
 export function changeColor(entityEl, params) {
     // console.log("changeColor", entityEl.id, params);
-    const { eventName, targetColor }=params;
-    if(targetColor==undefined){
-        if(eventName=='mouseleave') targetColor='#f00';
-        else if (eventName=='mouseenter') targetColor='#ff0';
+    const { eventName, targetColor } = params;
+    if (targetColor == undefined) {
+        if (eventName == 'mouseleave') targetColor = '#f00';
+        else if (eventName == 'mouseenter') targetColor = '#ff0';
     }
     // hoveredAnswer = entityEl.id;
     const textGeometries = entityEl.textEl.querySelectorAll('[text-geometry]');

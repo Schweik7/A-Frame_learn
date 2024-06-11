@@ -1,7 +1,19 @@
-export function initRecording() {
+import { logout,initUserAuth,frontendhost } from "./utils";
+export function initRecordingAndLogout() {
   // 创建按钮容器
   const buttonContainer = document.getElementById('buttonContainer');
+  const loginForm = document.getElementById('login-form');
+  const logoutButton = document.getElementById('logout-button');
+  const asciiArt = document.getElementById('ascii-art');
 
+  logoutButton.onclick = async () => {
+    loginForm.style.display = 'block';
+    logoutButton.style.display = 'none';
+    asciiArt.style.display = 'block';
+    await logout();
+    location.assign(frontendhost);
+    // userInfo.style.display = 'none';
+  };
   // 观察者对象
   const observer = new MutationObserver((mutationsList, observer) => {
     const enterVrContainer = document.querySelector('.a-enter-vr.fullscreen');
@@ -17,7 +29,7 @@ export function initRecording() {
 
   // 开始观察body的子节点变化
   observer.observe(document.body, { childList: true, subtree: true });
-  
+
   let mediaRecorder;
   let recordedChunks = [];
   let eventLogs = [];
@@ -43,15 +55,15 @@ export function initRecording() {
   function startRecording() {
     const canvas = document.querySelector('a-scene').canvas;
     const stream = canvas.captureStream();
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9',videoBitsPerSecond: 0.25 * 1024 * 1024 });
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9', videoBitsPerSecond: 0.25 * 1024 * 1024 });
 
-    mediaRecorder.ondataavailable = function(event) {
+    mediaRecorder.ondataavailable = function (event) {
       if (event.data.size > 0) {
         recordedChunks.push(event.data);
       }
     };
 
-    mediaRecorder.onstop = function() {
+    mediaRecorder.onstop = function () {
       const blob = new Blob(recordedChunks, { type: 'video/webm' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -87,49 +99,49 @@ export function initRecording() {
   AFRAME.registerComponent('log-events', {
     init: function () {
       const el = this.el;
-      
+
       // 监听点击事件
       el.addEventListener('click', function (event) {
-        const log = {type: 'click', detail: event.detail.intersection.point, timestamp: Date.now()};
+        const log = { type: 'click', detail: event.detail.intersection.point, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Click event:', log);
       });
 
       // 监听拖动事件
       el.addEventListener('dragstart', function (event) {
-        const log = {type: 'dragstart', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'dragstart', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Drag start:', log);
       });
 
       el.addEventListener('dragend', function (event) {
-        const log = {type: 'dragend', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'dragend', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Drag end:', log);
       });
 
       // 监听旋转事件
       el.addEventListener('rotationstart', function (event) {
-        const log = {type: 'rotationstart', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'rotationstart', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Rotation start:', log);
       });
 
       el.addEventListener('rotationend', function (event) {
-        const log = {type: 'rotationend', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'rotationend', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Rotation end:', log);
       });
 
       // 监听移动事件
       el.addEventListener('movestart', function (event) {
-        const log = {type: 'movestart', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'movestart', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Move start:', log);
       });
 
       el.addEventListener('moveend', function (event) {
-        const log = {type: 'moveend', detail: event.detail, timestamp: Date.now()};
+        const log = { type: 'moveend', detail: event.detail, timestamp: Date.now() };
         eventLogs.push(log);
         console.log('Move end:', log);
       });

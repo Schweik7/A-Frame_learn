@@ -1,46 +1,111 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>DST情景测验</title>
   <meta charset="utf8" name="description" content="DST情景测验">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <script type="module" src="dist/index.js" defer></script>
-  <style>
-    .button-container {
-      display: flex;
-      flex-direction: row;
-      gap: 100px;
-    }
-    .record-button {
-      padding: 5px;
-      background-color: #4CC3D9;
-      color: white;
-      border: double;
-      cursor: pointer;
-      font-size: 14px;
-      appearance: auto;
-      margin-left: 30px;
-    }
-    .a-enter-vr-button.fullscreen {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 10px;
-    }
-  </style>
 </head>
+
 <body>
   <div id="auth-container">
-    <form id="login-form"> 
-      <input type="text" id="username" name="username" placeholder="Username" required>
-      <input type="password" id="password" name="password" placeholder="Password" value="DSTTest" required>
-      <button type="submit">Login</button>
-    </form>
-    <button id="logout-button" style="display:none;">Logout</button>
-    <div id="user-info" style="display:none;">
-      <h3>Welcome, <span id="user-email"></span></h3>
-      <button id="user-center">User Center</button>
+    <div id="auth-container">
+      <div id="ascii-art">
+
+        _____                    _____             _____                _____                    _____                    _____             _____                    _____                    _____                    _____          
+        /\    \                  /\    \           |\    \              /\    \                  /\    \                  /\    \           /\    \                  /\    \                  /\    \                  /\    \         
+       /::\    \                /::\    \          |:\____\            /::\____\                /::\    \                /::\____\         /::\    \                /::\____\                /::\    \                /::\    \        
+      /::::\    \              /::::\    \         |::|   |           /:::/    /               /::::\    \              /::::|   |         \:::\    \              /:::/    /               /::::\    \              /::::\    \       
+     /::::::\    \            /::::::\    \        |::|   |          /:::/    /               /::::::\    \            /:::::|   |          \:::\    \            /:::/    /               /::::::\    \            /::::::\    \      
+    /:::/\:::\    \          /:::/\:::\    \       |::|   |         /:::/    /               /:::/\:::\    \          /::::::|   |           \:::\    \          /:::/    /               /:::/\:::\    \          /:::/\:::\    \     
+   /:::/__\:::\    \        /:::/__\:::\    \      |::|   |        /:::/____/               /:::/__\:::\    \        /:::/|::|   |            \:::\    \        /:::/    /               /:::/__\:::\    \        /:::/__\:::\    \    
+  /::::\   \:::\    \       \:::\   \:::\    \     |::|   |        |::|    |               /::::\   \:::\    \      /:::/ |::|   |            /::::\    \      /:::/    /               /::::\   \:::\    \      /::::\   \:::\    \   
+ /::::::\   \:::\    \    ___\:::\   \:::\    \    |::|___|______  |::|    |     _____    /::::::\   \:::\    \    /:::/  |::|   | _____     /::::::\    \    /:::/    /      _____    /::::::\   \:::\    \    /::::::\   \:::\    \  
+/:::/\:::\   \:::\____\  /\   \:::\   \:::\    \   /::::::::\    \ |::|    |    /\    \  /:::/\:::\   \:::\    \  /:::/   |::|   |/\    \   /:::/\:::\    \  /:::/____/      /\    \  /:::/\:::\   \:::\____\  /:::/\:::\   \:::\    \ 
+/:::/  \:::\   \:::|    |/::\   \:::\   \:::\____\ /::::::::::\____\|::|    |   /::\____\/:::/__\:::\   \:::\____\/:: /    |::|   /::\____\ /:::/  \:::\____\|:::|    /      /::\____\/:::/  \:::\   \:::|    |/:::/__\:::\   \:::\____\
+\::/    \:::\  /:::|____|\:::\   \:::\   \::/    //:::/~~~~/~~      |::|    |  /:::/    /\:::\   \:::\   \::/    /\::/    /|::|  /:::/    //:::/    \::/    /|:::|____\     /:::/    /\::/   |::::\  /:::|____|\:::\   \:::\   \::/    /
+\/_____/\:::\/:::/    /  \:::\   \:::\   \/____//:::/    /         |::|    | /:::/    /  \:::\   \:::\   \/____/  \/____/ |::| /:::/    //:::/    / \/____/  \:::\    \   /:::/    /  \/____|:::::\/:::/    /  \:::\   \:::\   \/____/ 
+         \::::::/    /    \:::\   \:::\    \   /:::/    /          |::|____|/:::/    /    \:::\   \:::\    \              |::|/:::/    //:::/    /            \:::\    \ /:::/    /         |:::::::::/    /    \:::\   \:::\    \     
+          \::::/    /      \:::\   \:::\____\ /:::/    /           |:::::::::::/    /      \:::\   \:::\____\             |::::::/    //:::/    /              \:::\    /:::/    /          |::|\::::/    /      \:::\   \:::\____\    
+           \::/____/        \:::\  /:::/    / \::/    /            \::::::::::/____/        \:::\   \::/    /             |:::::/    / \::/    /                \:::\__/:::/    /           |::| \::/____/        \:::\   \::/    /    
+            ~~               \:::\/:::/    /   \/____/              ~~~~~~~~~~               \:::\   \/____/              |::::/    /   \/____/                  \::::::::/    /            |::|  ~|               \:::\   \/____/     
+                              \::::::/    /                                                   \:::\    \                  /:::/    /                              \::::::/    /             |::|   |                \:::\    \         
+                               \::::/    /                                                     \:::\____\                /:::/    /                                \::::/    /              \::|   |                 \:::\____\        
+                                \::/    /                                                       \::/    /                \::/    /                                  \::/____/                \:|   |                  \::/    /        
+                                 \/____/                                                         \/____/                  \/____/                                    ~~                       \|___|                   \/____/         
+                                                                                                                                                                                                                                       
+
+      </div>
+      <form id="login-form">
+        <input type="text" id="username" name="username" placeholder="用户名" required>
+        <input type="password" id="password" name="password" placeholder="密码（不必修改）" value="DSTTest" required>
+        <button type="submit">Login</button>
+      </form>
+
+      <div id="user-info" style="display:none;">
+        <h3>Welcome, <span id="user-email"></span></h3>
+        <button id="user-center">User Center</button>
+      </div>
     </div>
-  </div>
 </body>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  #auth-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  #ascii-art {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #000000;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  button[type="submit"] {
+    padding: 10px;
+    background-color: #4CC3D9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #3a99a3;
+  }
+</style>
+
 </html>
