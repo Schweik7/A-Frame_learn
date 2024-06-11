@@ -10,6 +10,7 @@ https://github.com/Schweik7/superframe 提交了一些组件
 - 增加了录制视频功能，以及交互日志记录的组件，组件目前能记录click dragstart dragend rotationstart  rotationend movestart moveend 等事件，并将其记录在本地
 - 使用fastapi-users创建了一个简单的API后台
 - 使用snowpack作为前端服务框架
+- 增加了一个InteractionManager，用于管理全局的点击事件（射线与物体相交）
 - 
 
 ## 待办清单
@@ -19,6 +20,8 @@ https://github.com/Schweik7/superframe 提交了一些组件
 [] 选择选项将把成绩发给后台
 [] 把选项分开放置
 [X] 做一个panel框住选项
-[] 做一个VR环境的菜单，包括注销账户的功能（当然也可以不做，光靠刷新页面来登录，不过这是不是有点太蠢了）
+[] 做一个VR环境的菜单，包括注销账户的功能
 [] VR的数据，如何记录里面的操作，包括点击，拖动，旋转等等，然后把数据传给后台
 [] 考虑游戏手柄和VR手柄两者的支持，为之适配按键和手柄的操作
+[X] 模型交互后出现题目
+[X] 随机出题
