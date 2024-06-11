@@ -17,6 +17,7 @@ export function initRecording() {
 
   // 开始观察body的子节点变化
   observer.observe(document.body, { childList: true, subtree: true });
+  
   let mediaRecorder;
   let recordedChunks = [];
   let eventLogs = [];

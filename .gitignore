@@ -291,4 +291,5 @@ cython_debug/
 #.idea/
 backend/__pycache__/init_db.cpython-310.pyc
 backend/__pycache__/main.cpython-310.pyc
+models/DSTmodel.zip
 backend/专业库爬取/高考爬虫数据库.db

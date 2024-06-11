@@ -1,5 +1,5 @@
 from pydantic import field_validator
-from sqlmodel import SQLModel, Session, Field, create_engine,MetaData
+from sqlmodel import SQLModel, Session, Field, create_engine, MetaData
 from loguru import logger
 from datetime import datetime
 from sqlalchemy import Column, CHAR, VARCHAR, BOOLEAN, MetaData, Table, ForeignKey
@@ -54,10 +54,43 @@ class UserAnswers(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.now)
 
 
+def get_answers(s: str):
+    l = list(filter(lambda x: len(x) > 3, s.split("\n")))  # 太短的东西是分值
+    if len(l) != 5:
+        print("请检查数据")
+        print(s.split("\n"))
+    else:
+        return l
+
+
 engine = create_engine("sqlite:///backend/quez.sqlite")
 
 if __name__ == "__main__":
     SQLModel.metadata.create_all(engine)
+    import tablib
+
+    quz_data = tablib.Dataset(headers=["题目", "选项"])
+    with open("./backend/DST题库.xlsx", "rb") as f:
+        imported_data = tablib.Dataset().load(f.read(), format="xlsx")
+
+    session = Session(engine)
+    quez_type_range = [(0, 10), (10, 14), (14, 19), (19, 28), (28, 34), (34, 40)]
+    score_range = [0, 1, 1, 2, 3]
+    for i in range(6):
+        quez_type = QUESTION_TYPES[i]
+        for j in range(quez_type_range[i][0], quez_type_range[i][1]):
+            question_content = imported_data[j][0]
+            answers = get_answers(imported_data[j][1])
+            question = Quez(question_type=quez_type, question=question_content)
+            session.add(question)
+            # session.refresh(question)
+            session.commit()
+            for idx, answer in enumerate(answers):
+                session.add(
+                    Answer(answer=answer, quez_id=question.id, score=score_range[idx])
+                )
+            session.commit()
+    session.close()
     if 0:
         with Session(engine) as session:
             quez1 = Quez(

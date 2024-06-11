@@ -35,7 +35,7 @@ system_instruction = {
 
 def get_json_response(user_input):
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106", # 1106模型才能生成json格式的response，单纯turbo不支持type设为json_object参数
+        model="gpt-3.5-turbo-1106",  # 1106模型才能生成json格式的response，单纯turbo不支持type设为json_object参数
         response_format={
             "type": "json_object"
         },  # 使用 JSON 模式时，请始终指示模型通过对话中的某些消息（例如通过系统消息）生成 JSON
@@ -56,7 +56,7 @@ df = pd.read_excel(input_file, sheet_name="Sheet1")
 # 也就是说你如果在一个IP下使用多个Key，所有Key的每24小时请求数总和不能超过150；
 # 同理，你如果将一个Key用于多个IP，这个Key的每24小时请求数也不能超过150
 for index, question in tqdm(enumerate(df["问题描述"])):
-    if not 125< index < 429:
+    if not 125 < index < 429:
         continue
     question = question.strip()
     print(question)
@@ -72,6 +72,9 @@ for index, question in tqdm(enumerate(df["问题描述"])):
     except (RateLimitError, BadRequestError) as e:
         print("Rate Limit Error", e.message)
         break
+    except AttributeError as e:
+        print("Attribute Error", e.args)
+        continue
     # except:
     #     traceback.print_exc()
     #     print("Error")
