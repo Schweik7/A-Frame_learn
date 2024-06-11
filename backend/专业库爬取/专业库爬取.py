@@ -54,36 +54,39 @@ def read_json_from_db():
     return all_data
 
 def get_all_zy():
-    c.execute("SELECT * FROM 专业信息 limit 10")
+    c.execute("SELECT * FROM 专业信息")
     rows = c.fetchall()
     return rows
-# update_existing_data()
-# exit()
+
 # dest_url="https://gaokao.chsi.com.cn/zyk/zybk/" # 专业库首页
-
-
-crawl=False
-
-
-
+crawl=True
 if crawl:
     ksyx_url="https://gaokao.chsi.com.cn/zyk/zybk/ksyxPage?specId={}" # ksyx是开设院校
     ksyx_keyword_url="https://gaokao.chsi.com.cn/zyk/zybk/ksyx?"
+    kskc_keyword_url="https://gaokao.chsi.com.cn/zyk/zybk/kskc/" # kskc是开设课程
+    kskc_url="https://gaokao.chsi.com.cn/zyk/zybk/kskcPage/{}"
     # create_table()
-    data=read_json_from_db() # 获取所有的专业
+    # data=read_json_from_db() # 获取所有的专业
+    data=get_all_zy() # 获取所有的专业,(1, '哲学', '010101', '73381059', '')组成的list
     page = ChromiumPage(addr_driver_opts='127.0.0.1:9222')
-    page.listen.start(ksyx_keyword_url)
+    page.listen.start(kskc_keyword_url)
     # page.listen.start(["gaokao.chsi.com.cn/zyk/zybk/specialityesByCategory","gaokao.chsi.com.cn/zyk/zybk/xkCategory/"])
 
-    for 专业类 in tqdm(data): 
-        rowid=list(专业类.keys())[0]
-        rowdata=list(专业类.values())[0]['msg']
-        for index, ksyx in enumerate(rowdata):
-            page.get(ksyx_url.format(ksyx['specId']))
-            packet:DataPacket = page.listen.wait()
-            body=packet.response.body # 将会解析为一个Dict
-            save_json_to_db(body,3) # 保存到数据库中
-            if index==len(rowdata)-1: # 如果是专业中最后一个专业类
-                c.execute("update json_data set processed=1 where rowid=?",(rowid,))
-            sleep(3) # 等待1秒钟
+    for zy in tqdm(data): 
+        page.get(kskc_url.format(zy[3]))
+        packet:DataPacket = page.listen.wait()
+        body=packet.response.body # 将会解析为一个Dict
+        # print(body)
+        # exit()
+        try:
+            kskc_list=[ item['kcmc'] for item in body['msg']['kskcList']]
+            c.execute("update 专业信息 set 开设课程=? where id=?",(json.dumps(kskc_list,ensure_ascii=False),zy[0]))
+            conn.commit()
+            # exit()
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print("error:",zy)
+            continue
+        sleep(3) # 等待1秒钟
 conn.close()
