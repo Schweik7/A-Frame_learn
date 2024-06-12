@@ -133,10 +133,11 @@ dist
 */__pycache__/
 *.py[cod]
 *$py.class
-
+backend/__pycache__/
+backend/专业库爬取/
 # C extensions
 *.so
-
+*.sqlite
 # Distribution / packaging
 .Python
 build/

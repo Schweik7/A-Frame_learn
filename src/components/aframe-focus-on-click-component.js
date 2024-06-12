@@ -9,7 +9,7 @@ AFRAME.registerComponent('focus-on-click', {
       
       interactionManager.registerObject(el.object3D, () => {
         let finalRotation = null;
-        const cameraEl = document.querySelector('#camera');
+        const cameraEl = document.querySelector('#camera') || document.querySelector('[camera]');
         const cameraObj = cameraEl.object3D;
         const cameraPos = cameraObj.position;
         const targetPos = el.object3D.position;
@@ -43,7 +43,7 @@ AFRAME.registerComponent('focus-on-click', {
         });
   
         // 使用 look-at 属性确保目标在移动过程中始终对准相机
-        el.setAttribute('look-at', `#camera`);
+        el.setAttribute('look-at', `[camera]`);
   
         // 在动画完成后解除 look-at 并应用保存的旋转角度
         setTimeout(() => {

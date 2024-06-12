@@ -1,8 +1,9 @@
 import { initApplication } from "../index";
-let backendhost = 'http://192.168.1.10:8000';
+const hostname = window.location.hostname;
+let backendhost = `http://${hostname}:8000`
 let backendLoginUrl = `${backendhost}/auth/jwt/login`;
 let backendQuezUrl = `${backendhost}/quez`;
-export let frontendhost = 'http://192.168.1.10:5500';
+export let frontendhost = `http://${hostname}:5500`
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
@@ -203,3 +204,45 @@ export function changeColor(entityEl, params) {
     });
 }
 
+export function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+export async function submitAnswer(quez_id, answer_id,score) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        console.error('No auth token found');
+        throw new Error('No auth token found');
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8000/choice/${quez_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${token}`
+            },
+            body: new URLSearchParams({
+                answer_id: answer_id,
+                score: score // 假设这里的score是0，你可以根据需求更改
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Answer submitted successfully:', data);
+            return data;
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to submit answer:', errorData);
+            throw new Error(errorData.detail);
+        }
+    } catch (error) {
+        console.error('Error submitting answer:', error);
+        throw error;
+    }
+}

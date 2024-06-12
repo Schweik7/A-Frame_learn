@@ -51,7 +51,7 @@ AFRAME.registerComponent('look-at', {
       // 查询元素，获取其object3D，然后在场景上注册一个行为，在每个tick上跟踪目标。
       targetEl = self.el.sceneEl.querySelector(target);
       if (!targetEl) {
-        warn('"' + target + '" does not指向一个有效的实体以查看');
+        console.warn('"' + target + '" does not指向一个有效的实体以查看');
         return;
       }
       if (!targetEl.hasLoaded) {
