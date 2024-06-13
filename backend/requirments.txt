@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+fastapi-users
+python-dotenv
+tablib
+pandas
+numpy
+matplotlib
+sqlmodel
+loguru
