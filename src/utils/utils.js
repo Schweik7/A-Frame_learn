@@ -3,7 +3,7 @@ const hostname = window.location.hostname;
 let backendhost = `http://${hostname}:8000`
 let backendLoginUrl = `${backendhost}/auth/jwt/login`;
 let backendQuezUrl = `${backendhost}/quez`;
-export let frontendhost = `http://${hostname}:5500`
+export let frontendhost = `http://${hostname}`
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {

@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-fastapi-users
+fastapi-users[sqlalchemy]
+aiosqlite
 python-dotenv
 tablib
 pandas
@@ -8,3 +9,4 @@ numpy
 matplotlib
 sqlmodel
 loguru
+ipython
