@@ -1,9 +1,9 @@
-import fastapi
-from fastapi import Depends, Form
+from fastapi import Depends, Form,FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from init_db import engine, QUESTION_TYPES, Quez, Answer, UserAnswers
+# from fastapi.staticfiles import StaticFiles
+from .init_db import engine, Quez, Answer, UserAnswers
 from sqlmodel import SQLModel, Session, select
-from app import (
+from .app import (
     auth_backend,
     UserRead,
     UserCreate,
@@ -15,6 +15,7 @@ from app import (
 )
 import datetime
 import uvicorn
+import os
 
 current_user = fastapi_users.current_user()
 current_active_user = fastapi_users.current_user(active=True)
@@ -23,7 +24,12 @@ current_superuser = fastapi_users.current_user(active=True, superuser=True)
 
 origins = ["http://localhost:5500", "*"]
 
-app = fastapi.FastAPI()
+app =FastAPI()
+# if (
+#     os.getenv("ENV", "development") == "production"
+# ):  # 如果是在生产环境（默认在开发环境）
+#     app.mount("/", StaticFiles(directory="build", html=True), name="static")
+# app.mount("/", StaticFiles(directory="build", html=True), name="static")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # 允许访问的域列表

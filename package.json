@@ -1,11 +1,15 @@
 {
   "name": "a-frame_learn",
   "version": "1.0.0",
-  "description": "my AFrame Scene!",
+  "description": "my A-Frame Scene!For Psychology",
   "scripts": {
-    "fastapi": "uvicorn backend.main:app --reload",
-    "aframe": "snowpack dev --no-hmr",
-    "start": "pnpm run fastapi & pnpm run aframe"
+    "fastapi:dev": "uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000",
+    "fastapi:prod": "uvicorn backend.main:app --host 0.0.0.0 --port 8000",
+    "aframe:dev": "snowpack dev --no-hmr",
+    "aframe:build": "snowpack build",
+    "serve:prod": "NODE_ENV=production pnpm run aframe:build && serve -s build -p 80",
+    "start:dev": "pnpm run aframe:dev && pnpm run fastapi:dev",
+    "start:prod": "NODE_ENV=production pnpm run aframe:build && pnpm run serve:prod && pnpm run fastapi:dev"
   },
   "repository": {
     "type": "git",
@@ -23,16 +27,14 @@
   },
   "homepage": "https://github.com/Schweik7/A-Frame_learn#readme",
   "devDependencies": {
-    "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "snowpack": "^3.8.8",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.4.3",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "@parcel/runtime-browser-hmr": "^2.12.0"
+    "@parcel/runtime-browser-hmr": "^2.12.0",
+    "dotenv-flow": "^4.1.0"
   }
 }
