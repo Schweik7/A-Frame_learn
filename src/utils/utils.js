@@ -1,9 +1,5 @@
 import { initApplication } from "../index";
-const hostname = window.location.hostname;
-let backendhost = `http://${hostname}:8000`
-let backendLoginUrl = `${backendhost}/auth/jwt/login`;
-let backendQuezUrl = `${backendhost}/quez`;
-export let frontendhost = `http://${hostname}`
+import { backendhost, backendLoginUrl, backendQuezUrl } from "../config";
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
