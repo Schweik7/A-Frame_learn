@@ -5,11 +5,11 @@
   "scripts": {
     "fastapi:dev": "uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000",
     "fastapi:prod": "uvicorn backend.main:app --host 0.0.0.0 --port 8000",
-    "aframe:dev": "cross-env NODE_ENV=development snowpack dev --no-hmr",
+    "aframe": "cross-env NODE_ENV=development snowpack dev --no-hmr",
     "build": "cross-env NODE_ENV=production snowpack build",
     "serve": "serve -s build -p 80",
-    "start:dev": "pnpm run aframe:dev && pnpm run fastapi:dev",
-    "start:prod": "NODE_ENV=production pnpm run aframe:build && pnpm run serve:prod && pnpm run fastapi:dev"
+    "start:dev": "pnpm run aframe && pnpm run fastapi:dev",
+    "start:prod": "cross-env NODE_ENV=production pnpm run build && pnpm run prod && pnpm run fastapi:dev"
   },
   "repository": {
     "type": "git",
