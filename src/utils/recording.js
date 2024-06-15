@@ -1,4 +1,5 @@
-import { logout,initUserAuth,frontendhost } from "./utils";
+import { logout } from "./utils";
+import { frontendhost } from "../config";
 export function initRecordingAndLogout() {
   // 创建按钮容器
   const buttonContainer = document.getElementById('buttonContainer');

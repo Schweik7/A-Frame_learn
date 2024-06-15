@@ -2,6 +2,7 @@
 // See all supported options: https://www.snowpack.dev/reference/configuration
 
 /** @type {import("snowpack").SnowpackUserConfig } */
+require('dotenv-flow').config();
 module.exports = {
   mount: {
     // 将 src 目录挂载到 /dist，用于存放 JS 和其他处理过的资源
@@ -26,5 +27,11 @@ module.exports = {
     htmlFragments:true
     /* ... */
   },
-  // exclude: ["./src/aframe-scene.html"],
+  env: {
+    API_URL: process.env.BACKEND_API_URL
+    /* ... */
+  },
+  exclude: [
+    "**/backend/**"  // 排除 backend 文件夹
+  ],
 };

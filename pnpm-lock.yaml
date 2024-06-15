@@ -4,6 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+<<<<<<< HEAD
 importers:
 
   .:
@@ -36,6 +37,35 @@ importers:
       webpack-dev-server:
         specifier: ^5.0.4
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.91.0)
+=======
+dependencies:
+  '@parcel/runtime-browser-hmr':
+    specifier: ^2.12.0
+    version: 2.12.0(@parcel/core@2.12.0)
+  dotenv:
+    specifier: ^16.4.5
+    version: 16.4.5
+  dotenv-flow:
+    specifier: ^4.1.0
+    version: 4.1.0
+
+devDependencies:
+  concurrently:
+    specifier: ^8.2.2
+    version: 8.2.2
+  snowpack:
+    specifier: ^3.8.8
+    version: 3.8.8
+  webpack:
+    specifier: ^5.91.0
+    version: 5.91.0(webpack-cli@5.1.4)
+  webpack-cli:
+    specifier: ^5.1.4
+    version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.91.0)
+  webpack-dev-server:
+    specifier: ^5.0.4
+    version: 5.0.4(webpack-cli@5.1.4)(webpack@5.91.0)
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
 packages:
 
@@ -3881,6 +3911,7 @@ snapshots:
 
   aws4@1.12.0: {}
 
+<<<<<<< HEAD
   axios@1.6.8:
     dependencies:
       follow-redirects: 1.15.6
@@ -3890,6 +3921,11 @@ snapshots:
       - debug
 
   balanced-match@1.0.2: {}
+=======
+  /balanced-match@1.0.2:
+    resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+    dev: true
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   base-x@3.0.9:
     dependencies:
@@ -4317,7 +4353,26 @@ snapshots:
 
   dotenv-expand@5.1.0: {}
 
+<<<<<<< HEAD
   dotenv@7.0.0: {}
+=======
+  /dotenv-flow@4.1.0:
+    resolution: {integrity: sha512-0cwP9jpQBQfyHwvE0cRhraZMkdV45TQedA8AAUZMsFzvmLcQyc1HPv+oX0OOYwLFjIlvgVepQ+WuQHbqDaHJZg==}
+    engines: {node: '>= 12.0.0'}
+    dependencies:
+      dotenv: 16.4.5
+    dev: false
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /dotenv@7.0.0:
+    resolution: {integrity: sha512-M3NhsLbV1i6HuGzBUH8vXrtxOk+tWmzWKDMbAVSUp3Zsjm7ywFeuwrUXhmhQyRK1q5B5GGy7hcXPbj3bnfZg2g==}
+    engines: {node: '>=6'}
+    dev: false
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   eastasianwidth@0.2.0: {}
 
@@ -4543,6 +4598,7 @@ snapshots:
       combined-stream: 1.0.8
       mime-types: 2.1.35
 
+<<<<<<< HEAD
   form-data@4.0.0:
     dependencies:
       asynckit: 0.4.0
@@ -4550,6 +4606,12 @@ snapshots:
       mime-types: 2.1.35
 
   forwarded@0.2.0: {}
+=======
+  /forwarded@0.2.0:
+    resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
+    engines: {node: '>= 0.6'}
+    dev: true
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   fresh@0.5.2: {}
 
@@ -5496,9 +5558,15 @@ snapshots:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
 
+<<<<<<< HEAD
   proxy-from-env@1.1.0: {}
 
   psl@1.9.0: {}
+=======
+  /psl@1.9.0:
+    resolution: {integrity: sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==}
+    dev: true
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   pump@3.0.0:
     dependencies:
@@ -6018,6 +6086,7 @@ snapshots:
 
   treeverse@1.0.4: {}
 
+<<<<<<< HEAD
   ts-loader@9.5.1(typescript@5.4.3)(webpack@5.91.0):
     dependencies:
       chalk: 4.1.2
@@ -6029,6 +6098,11 @@ snapshots:
       webpack: 5.91.0(webpack-cli@5.1.4)
 
   tslib@2.6.2: {}
+=======
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: true
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   tunnel-agent@0.6.0:
     dependencies:
@@ -6045,9 +6119,15 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
+<<<<<<< HEAD
   typescript@5.4.3: {}
 
   undici-types@5.26.5: {}
+=======
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
+>>>>>>> 02ba6e0d7c9d4f843c00df427551b7b531cfd657
 
   unique-filename@1.1.1:
     dependencies:

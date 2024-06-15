@@ -1,5 +1,5 @@
 import { initApplication } from "../index";
-import { backendhost, backendLoginUrl, backendQuezUrl } from "../config";
+import { backendhost, backendLoginUrl, backendQuezUrl,frontendhost } from "../config";
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
