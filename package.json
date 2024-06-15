@@ -7,7 +7,7 @@
     "fastapi:prod": "uvicorn backend.main:app --host 0.0.0.0 --port 8000",
     "aframe": "cross-env NODE_ENV=development snowpack dev --no-hmr",
     "build": "cross-env NODE_ENV=production snowpack build",
-    "serve": "serve -s build -p 80",
+    "serve": "http-server build -c-1 -p 80 --404 _404.html",
     "start:dev": "pnpm run aframe && pnpm run fastapi:dev",
     "start:prod": "cross-env NODE_ENV=production pnpm run build && pnpm run prod && pnpm run fastapi:dev"
   },

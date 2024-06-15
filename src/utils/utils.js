@@ -1,6 +1,7 @@
 import { initApplication } from "../index";
 import { backendhost, backendLoginUrl, backendQuezUrl,frontendhost } from "../config";
 let hoveredAnswer = null;
+export let loadedScene=false;
 export let quezData = {
     "quez": {
         "question": "田田的学习能力不错，但最近发现自己一学习就感到烦躁、无聊和疲惫，没有学习的动力。如果你遇到和田田一样的情况，在面对学习任务时，你最可能有以下哪种行为？",

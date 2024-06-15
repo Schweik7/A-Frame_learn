@@ -8,7 +8,7 @@ import './components/aframe-look-at-component';
 import './components/aframe-focus-on-click-component';
 // import './components/aframe-proxy-event-component'; // 这个组件的事件代理会emit一个customEvent，不利于代码编写
 import { initRecordingAndLogout } from './utils/recording';
-import { fetchData, submitAnswer,textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
+import {loadedScene, fetchData, submitAnswer, textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
 import { InteractionManager } from './utils/interactionManager'
 import { USE_LOCAL_DATA } from './config';
 // let USE_LOCAL_DATA = true;
@@ -19,13 +19,17 @@ window.textAnimation = textAnimation;
 
 
 export async function initApplication() {
-    const response = await fetch('aframe-scene.html');
-    const data = await response.text();
-    document.body.innerHTML += data;
-    initRecordingAndLogout();
-    // 创建全局交互管理器实例
-    const interactionManager = new InteractionManager();
-    window.interactionManager = interactionManager;
+    if (!loadedScene) {
+        const response = await fetch('aframe-scene.html');
+        const data = await response.text();
+        document.body.innerHTML += data;
+
+        initRecordingAndLogout();
+        // 创建全局交互管理器实例
+        const interactionManager = new InteractionManager();
+        window.interactionManager = interactionManager;
+        loadedScene = true;
+    }
     // 创建场景
     if (isLogined()) firstScene();
     // import('./utils/recording').then().catch();
@@ -84,7 +88,7 @@ function createText(quez_data) {
         answerText.setAttribute("background", { color: "#000" });
         // 点击答案区域的话，发送选中答案给后端
         answerText.addEventListener('click', () => {
-            submitAnswer(quez_data.quez.id, answer.id,answer.score).then((result) => {
+            submitAnswer(quez_data.quez.id, answer.id, answer.score).then((result) => {
                 // console.log("提交答案成功", result);
                 // questionText.setAttribute('visible', 'false');
                 panel.setAttribute('visible', 'false');
