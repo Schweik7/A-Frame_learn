@@ -5,8 +5,8 @@
   "scripts": {
     "fastapi:dev": "uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000",
     "fastapi:prod": "uvicorn backend.main:app --host 0.0.0.0 --port 8000",
-    "aframe:dev": "snowpack dev --no-hmr",
-    "build": "NODE_ENV=production snowpack build",
+    "aframe:dev": "cross-env NODE_ENV=development snowpack dev --no-hmr",
+    "build": "cross-env NODE_ENV=production snowpack build",
     "serve": "serve -s build -p 80",
     "start:dev": "pnpm run aframe:dev && pnpm run fastapi:dev",
     "start:prod": "NODE_ENV=production pnpm run aframe:build && pnpm run serve:prod && pnpm run fastapi:dev"
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/Schweik7/A-Frame_learn#readme",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "snowpack": "^3.8.8",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
