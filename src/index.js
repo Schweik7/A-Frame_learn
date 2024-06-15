@@ -8,12 +8,12 @@ import './components/aframe-look-at-component';
 import './components/aframe-focus-on-click-component';
 // import './components/aframe-proxy-event-component'; // 这个组件的事件代理会emit一个customEvent，不利于代码编写
 import { initRecordingAndLogout } from './utils/recording';
-import {loadedScene, fetchData, submitAnswer, textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
+import {fetchData, submitAnswer, textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
 import { InteractionManager } from './utils/interactionManager'
 import { USE_LOCAL_DATA } from './config';
 // let USE_LOCAL_DATA = true;
 let quez_data = null; // 问题数据
-
+let loadedScene=false;
 window.originalPositions = {};
 window.textAnimation = textAnimation;
 
@@ -40,6 +40,7 @@ function firstScene() {
     let model2 = document.getElementById('model2');
     let model3 = document.getElementById('model3');
     document.addEventListener('model-loaded', function () {
+        console.log('model loaded');
         let boat = model2.object3D.getObjectByName('旗帜');
         if (boat) {
             boat.userData.clickable = true;
