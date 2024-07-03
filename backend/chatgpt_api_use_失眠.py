@@ -6,7 +6,6 @@ import traceback
 import httpx
 import dotenv
 import os
-
 dotenv.load_dotenv(".env", verbose=True)
 # proxy_url = {
 #     "http://": "http://127.0.0.1:10809",
@@ -14,8 +13,6 @@ dotenv.load_dotenv(".env", verbose=True)
 # }
 proxy_url = None
 client = OpenAI(
-    # api_key="sk-pthQntZUxIflZEx9l71vNUYEOpTwhdoN1UFlCuc66ImIXq4b", # 免费的
-    # api_key="sk-y1HAjlF40jUSo6BfekphSuJDwwDQu49skhAK6teIBmcHZrzO", # 也是免费的
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url="https://api.chatanywhere.tech/v1",
     http_client=httpx.Client(proxies=proxy_url) if proxy_url else None,
