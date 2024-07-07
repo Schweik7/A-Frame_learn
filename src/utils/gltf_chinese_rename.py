@@ -22,6 +22,7 @@ def process_gltf_files(directory):
 
 
 if __name__ == "__main__":
-    directory = input("Enter the directory path to process GLTF files: ")
+    # directory = input("Enter the directory path to process GLTF files: ")
+    directory=r"models\DSTmodel"
     process_gltf_files(directory)
     print("Processing complete.")

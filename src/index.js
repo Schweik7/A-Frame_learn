@@ -23,7 +23,6 @@ export async function initApplication() {
         const response = await fetch('aframe-scene.html');
         const data = await response.text();
         document.body.innerHTML += data;
-
         initRecordingAndLogout();
         // 创建全局交互管理器实例
         const interactionManager = new InteractionManager();
@@ -36,29 +35,9 @@ export async function initApplication() {
     }
 }
 
-function secondSceneListenerInit() {
-    let scene2 = document.getElementById('scene2');
-    let pushButton = scene2.object3D.getObjectByName('交互2');
-    if (pushButton) {
-        console.log("找到交互2按钮")
-        pushButton.userData.clickable = true;
-        interactionManager.registerObject(pushButton, async () => {
-            console.log('按钮交互2被点击');
-            if (!USE_LOCAL_DATA) {
-                quez_data = await fetchData(2);
-            }
-            else {
-                quez_data = localQuezData;
-            }
-            createText(quez_data);
-        }, 'high')
-    }
-}
-
 function initSceneListener() {
     let main_scene = document.getElementById('main_scene');
-
-    document.addEventListener('model-loaded', function () {
+    main_scene.addEventListener('model-loaded', function () {
         console.log('model loaded');
         let boat_flag = main_scene.object3D.getObjectByName('旗帜');
         if (boat_flag) {
@@ -77,41 +56,68 @@ function allScenesClickListenerInit() {
 }
 
 function allScenesEnter() {
-    secondScene();
-    thirdScene();
+    main_scene.setAttribute('visible', 'false');
+
+    let curScene = null;
+    for (let i = 2; i <= 10; i++) {
+        curScene = document.getElementById(`scene${i}`);
+        if (curScene) {
+            curScene.setAttribute('visible', 'true');
+        }
+    }
+
+    let boat_flag = main_scene.object3D.getObjectByName('旗帜');
+    interactionManager.unregisterObject(boat_flag)
 }
 
-function secondScene() {
-    let main_scene = document.getElementById('main_scene');
+
+function secondSceneListenerInit() {
     let scene2 = document.getElementById('scene2');
-    // 隐藏 main_scene 并显示 scene2
-    main_scene.setAttribute('visible', 'false');
-    scene2.setAttribute('visible', 'true');
+    scene2.addEventListener('model-loaded', function () {
+        let pushButton = scene2.object3D.getObjectByName('交互2');
+        if (pushButton) {
+            // console.log("找到交互2按钮")
+            pushButton.userData.clickable = true;
+            interactionManager.registerObject(pushButton, async () => {
+                // console.log('按钮交互2被点击');
+                if (!USE_LOCAL_DATA) {
+                    quez_data = await fetchData(2);
+                }
+                else {
+                    quez_data = localQuezData;
+                }
+                createText(quez_data);
+            }, 'high', { min_distance: 0, max_distance: 5 });
+        }
+    });
 }
+
 
 function thirdSceneListenerInit() {
     let scene3 = document.getElementById('scene3');
-    console.log('场景3 加载完成');
-    let paper = scene3.object3D.getObjectByName('交互3');
-    if (paper) {
-        console.log('存在交互3 物体')
-        paper.userData.clickable = true;
-        // TODO 考虑实现“撕”这个动作
-        // TODO 交互3是个啥
-        interactionManager.registerObject(paper, async () => {
-            paper.setAttribute('visible', 'false');
-            console.log('按钮交互3被点击');
-            if (!USE_LOCAL_DATA) {
-                quez_data = await fetchData(3);
-            }
-            else {
-                quez_data = localQuezData;
-            }
-            createText(quez_data);
-        }, 'high')
-    } else {
-        console.log('没有找到交互3按钮');
-    }
+    // console.log('场景3 加载完成');
+    scene3.addEventListener('model-loaded', function () {
+        let paper = scene3.object3D.getObjectByName('交互3');
+        if (paper) {
+            console.log('存在交互3 物体')
+            paper.userData.clickable = true;
+            // TODO 考虑实现“撕”这个动作
+            // TODO 交互3是个啥
+            interactionManager.registerObject(paper, async () => {
+                paper.setAttribute('visible', 'false');
+                console.log('按钮交互3被点击');
+                if (!USE_LOCAL_DATA) {
+                    quez_data = await fetchData(3);
+                }
+                else {
+                    quez_data = localQuezData;
+                }
+                createText(quez_data);
+            }, 'high', { min_distance: 0, max_distance: 5 })
+        } else {
+            console.log('没有找到交互3按钮');
+        }
+    });
 }
 
 function createText(quez_data) {

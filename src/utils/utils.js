@@ -228,7 +228,7 @@ export async function submitAnswer(quez_id, answer_id,score) {
                 score: score // 假设这里的score是0，你可以根据需求更改
             })
         });
-
+        // console.log("submitAnswer",quez_id,answer_id,score);
         if (response.ok) {
             const data = await response.json();
             console.log('Answer submitted successfully:', data);

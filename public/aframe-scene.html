@@ -4,8 +4,12 @@
         <a-asset-item id="myModel2" src="models/DSTmodel/island.gltf"></a-asset-item>
         <a-asset-item id="myModel3" src="models/DSTmodel/1_学业成就_题目2_相片闹钟.gltf"></a-asset-item>
         <a-asset-item id="myScene3" src="models/DSTmodel/1_学业成就_题目3_通知书目标清单.gltf"></a-asset-item>
+        <a-asset-item id="myScene4" src="models/DSTmodel/1_学业成就_题目4_照片墙.gltf"></a-asset-item>
+        <a-asset-item id="myScene5" src="models/DSTmodel/1_学业成就_题目5_6_文字气球.gltf"></a-asset-item>
+        <a-asset-item id="myScene7" src="models/DSTmodel/1_学业成就_题目7_8_传声筒.gltf"></a-asset-item>
 
     </a-assets>
+
     <a-camera>
         <a-cursor></a-cursor>
     </a-camera>
@@ -15,14 +19,21 @@
     </a-camera> -->
 
     <!-- Initial model2 loading -->
-     <!-- 首先将主场景隐藏，方便测试 -->
+    <!-- 首先将主场景隐藏，方便测试 -->
     <!-- <a-entity id="main_scene" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0" visible="false" set-opacity></a-entity> -->
-    <a-entity id="main_scene" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0" visible="true" set-opacity></a-entity>
+    <a-entity id="main_scene" gltf-model="#myModel2" position="0 0 -3" rotation="0 0 0" visible="true"
+        set-opacity></a-entity>
 
     <!-- Model3 hidden initially -->
     <a-entity id="scene2" gltf-model="#myModel3" position="0 5 -3" rotation="0 0 0" visible="false" set-opacity
         focus-on-click="moveRelativeTo: camera"></a-entity>
     <a-entity id="scene3" gltf-model="#myScene3" position="3 3 -3" rotation="0 0 0" visible="false" set-opacity
+        focus-on-click="moveRelativeTo: camera"></a-entity>
+    <a-entity id="scene4" gltf-model="#myScene4" position="5 3 -3" rotation="0 0 0" visible="false" set-opacity
+        focus-on-click="moveRelativeTo: camera"></a-entity>
+    <a-entity id="scene5" gltf-model="#myScene5" position="-3 3 -3" rotation="0 0 0" visible="false" set-opacity
+        focus-on-click="moveRelativeTo: camera"></a-entity>
+    <a-entity id="scene7" gltf-model="#myScene5" position="-5 3 -3" rotation="0 0 0" visible="false" set-opacity
         focus-on-click="moveRelativeTo: camera"></a-entity>
     <!-- <a-box id="interactive-box" position="-1 0.5 -3" color="#4CC3D9"></a-box> -->
     <a-entity id="text-panel" position="0 7 -4">

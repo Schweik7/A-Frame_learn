@@ -14,14 +14,8 @@ AFRAME.registerComponent('focus-on-click', {
         const cameraPos = cameraObj.position;
         const targetPos = el.object3D.position;
         const distance = cameraPos.distanceTo(targetPos);
-        if(distance < 4.0){
-            console.log(`距离${el.id}太近，不做操作`);
-            return 
-        }
         console.log(`Distance: ${distance}, Target: ${targetPos.x}, ${targetPos.y}, ${targetPos.z}, cameraPos: ${cameraPos.x}, ${cameraPos.y}, ${cameraPos.z}`);
-        
         let newTargetPos;
-  
         if (data.moveRelativeTo === 'camera') {
           // 根据相机当前角度计算目标位置
           const direction = new THREE.Vector3();
@@ -60,7 +54,7 @@ AFRAME.registerComponent('focus-on-click', {
           window.finalRotation = finalRotation;
           
         }, duration);
-      });
+      },'normal',{min_distance: 4, max_distance: 100});
     }
   });
   
