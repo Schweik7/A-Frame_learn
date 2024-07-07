@@ -83,6 +83,7 @@ export async function logout() {
         return true;
     } else {
         console.error('Failed to logout:', response);
+        localStorage.removeItem('authToken');
         return false;
     }
 }

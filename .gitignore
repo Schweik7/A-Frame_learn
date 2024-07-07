@@ -135,6 +135,8 @@ dist
 *$py.class
 backend/__pycache__/
 backend/专业库爬取/
+*.xlsx
+*.epub
 # C extensions
 *.so
 *.sqlite
