@@ -1,15 +1,15 @@
 {
   "name": "a-frame_learn",
   "version": "1.0.0",
-  "description": "my A-Frame Scene!For Psychology",
+  "description": "My A-Frame Scene!For Psychology",
   "scripts": {
     "fastapi:dev": "uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000",
     "fastapi:prod": "uvicorn backend.main:app --host 0.0.0.0 --port 8000",
     "aframe": "cross-env NODE_ENV=development snowpack dev --no-hmr",
     "build": "cross-env NODE_ENV=production snowpack build",
     "serve": "http-server build -c-1 -p 80 --404 _404.html",
-    "start:dev": "pnpm run aframe && pnpm run fastapi:dev",
-    "start:prod": "cross-env NODE_ENV=production pnpm run build && pnpm run prod && pnpm run fastapi:dev"
+    "start:dev": "concurrently \"pnpm run aframe\" \"pnpm run fastapi:dev\"",
+    "start:prod": "cross-env NODE_ENV=production pnpm run build && concurrently \"pnpm run serve\" \"pnpm run fastapi:prod\""
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "keywords": [
     "aframe",
     "js",
-    "ts"
+    "fastapi"
   ],
   "author": "Schweik7",
   "license": "ISC",
@@ -27,15 +27,14 @@
   },
   "homepage": "https://github.com/Schweik7/A-Frame_learn#readme",
   "devDependencies": {
+    "cannon-es": "^0.20.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "snowpack": "^3.8.8",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "three": "^0.166.1",
+    "three-stdlib": "^2.30.4"
   },
   "dependencies": {
-    "@parcel/runtime-browser-hmr": "^2.12.0",
     "dotenv-flow": "^4.1.0",
     "serve": "^14.2.3"
   }

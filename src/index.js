@@ -97,12 +97,11 @@ function thirdSceneListenerInit() {
     let scene3 = document.getElementById('scene3');
     // console.log('场景3 加载完成');
     scene3.addEventListener('model-loaded', function () {
-        let paper = scene3.object3D.getObjectByName('交互3');
+        let paper = scene3.object3D.getObjectByName('y校');
         if (paper) {
-            console.log('存在交互3 物体')
+            console.log('存在交互3 物体：y校')
             paper.userData.clickable = true;
             // TODO 考虑实现“撕”这个动作
-            // TODO 交互3是个啥
             interactionManager.registerObject(paper, async () => {
                 paper.setAttribute('visible', 'false');
                 console.log('按钮交互3被点击');
