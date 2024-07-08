@@ -14,6 +14,8 @@ import { USE_LOCAL_DATA } from './config';
 // let USE_LOCAL_DATA = true;
 let quez_data = null; // 问题数据
 let loadedScene = false;
+let shuffledAnswers = null;
+let answersLength = null;
 window.originalPositions = {};
 window.textAnimation = textAnimation;
 
@@ -53,6 +55,32 @@ function initSceneListener() {
 function allScenesClickListenerInit() {
     secondSceneListenerInit();
     thirdSceneListenerInit();
+    textPanelListenerInit();
+}
+
+function textPanelListenerInit() {
+    let panel = document.getElementById('text-panel');
+    panel.addEventListener('textAnimationEnd', (event) => {
+        const { nextPosition, nextEl } = event.detail;
+        let textEl = document.getElementById(nextEl);
+
+        if (textEl) {
+            let parts = nextEl.split("answer");
+            let index = parseInt(parts[1], 10) + 1;
+            let text =shuffledAnswers[index - 1].answer; // shuffledAnswers是一个全局变量，每次获取题目都会更新
+            let nextTarget = ""; // 下一个目标
+            if (index < answersLength) nextTarget = "answer" + index;
+            textEl.setAttribute('text-animation', {
+                text: text, color: '#F00', font: '#myFont', charsPerLine: 20, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition, childID: `answer${index}Char`
+            });
+            mouseEventListen(textEl);
+        }
+        else return;
+    });
+}
+
+function getAnswerText(index) {
+   return shuffledAnswers[index - 1].answer
 }
 
 function allScenesEnter() {
@@ -121,10 +149,10 @@ function thirdSceneListenerInit() {
 
 function createText(quez_data) {
     const panel = document.getElementById('text-panel');
-    const answersLength = quez_data.answers.length;
-    console.log("answersLength", answersLength);
-    const shuffledAnswers = shuffle(quez_data.answers.slice()); // 打乱答案顺序
-    console.log("shuffledAnswers", shuffledAnswers);
+    answersLength = quez_data.answers.length;
+    // console.log("answersLength", answersLength);
+    shuffledAnswers = shuffle(quez_data.answers.slice()); // 打乱答案顺序
+    // console.log("shuffledAnswers", shuffledAnswers);
     const questionText = document.createElement('a-entity');
     questionText.id = "question";
     questionText.setAttribute('text-animation', { text: quez_data.quez.question, charsPerLine: 20, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0", childID: "questionChar" });// 当问题展示完毕后，发送信号给第一个答案
@@ -138,30 +166,12 @@ function createText(quez_data) {
         answerText.setAttribute("background", { color: "#000" });
         // 点击答案区域的话，发送选中答案给后端
         answerText.addEventListener('click', () => {
+            console.log("点击了答案", answer.answer);
             submitAnswer(quez_data.quez.id, answer.id, answer.score).then((result) => {
-                // console.log("提交答案成功", result);
-                // questionText.setAttribute('visible', 'false');
-                panel.setAttribute('visible', 'false');
+                //  将text-panel的所有内部html都清空，也就是删除那些子组件   <a-entity id="text-panel" position="0 7 -4"> </a-entity>
+                panel.innerHTML = "";
             });
         });
-    });
-
-    panel.addEventListener('textAnimationEnd', (event) => {
-        const { nextPosition, nextEl } = event.detail;
-        let textEl = document.getElementById(nextEl);
-
-        if (textEl) {
-            let parts = nextEl.split("answer");
-            let index = parseInt(parts[1], 10) + 1;
-            let text = shuffledAnswers[index - 1].answer;
-            let nextTarget = ""; // 下一个目标
-            if (index < answersLength) nextTarget = "answer" + index;
-            textEl.setAttribute('text-animation', {
-                text: text, color: '#F00', font: '#myFont', charsPerLine: 20, indent: 0, _function: 'textAnimation', signalTarget: nextTarget, 'position': nextPosition, childID: `answer${index}Char`
-            });
-            mouseEventListen(textEl);
-        }
-        else return;
     });
 }
 

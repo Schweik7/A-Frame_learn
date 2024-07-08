@@ -32,3 +32,4 @@ https://github.com/Schweik7/superframe 提交了一些组件
 [X] 完成了生产和开发环境的切换
 [] 反向代理api域名
 [] 完成所有的交互
+[] 现在没有后台的话也能直接进入场景
