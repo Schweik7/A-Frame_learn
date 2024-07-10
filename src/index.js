@@ -13,7 +13,6 @@ import { initRecordingAndLogout } from './utils/recording';
 import { fetchData, submitAnswer, textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
 import { InteractionManager } from './utils/interactionManager'
 import { USE_LOCAL_DATA } from './config';
-// let USE_LOCAL_DATA = true;
 let quez_data = null; // 问题数据
 let loadedScene = false;
 let shuffledAnswers = null;
@@ -107,10 +106,8 @@ function secondSceneListenerInit() {
     scene2.addEventListener('model-loaded', function () {
         let pushButton = scene2.object3D.getObjectByName('交互2');
         if (pushButton) {
-            // console.log("找到交互2按钮")
             pushButton.userData.clickable = true;
             interactionManager.registerObject(pushButton, async () => {
-                // console.log('按钮交互2被点击');
                 if (!USE_LOCAL_DATA) {
                     quez_data = await fetchData(2);
                 }
@@ -126,17 +123,12 @@ function secondSceneListenerInit() {
 
 function thirdSceneListenerInit() {
     let scene3 = document.getElementById('scene3');
-    // console.log('场景3 加载完成');
     scene3.addEventListener('model-loaded', function () {
         let paper = scene3.object3D.getObjectByName('页2');
         if (paper) {
-            // console.log('存在交互3 物体：y校')
             paper.userData.clickable = true;
-
             interactionManager.registerObject(paper, async () => {
-                // paper.setAttribute('visible', 'false');
                 paper.visible = false;
-                // scene3.object3D.getObjectByName('页3').visible=false;
                 scene3.object3D.getObjectByName('y校').visible = false;
                 scene3.object3D.getObjectByName('目标').visible = false;
                 console.log('按钮交互3被点击');
@@ -216,8 +208,7 @@ function createText(quez_data, sourceEl) {
         answerText.addEventListener('click', () => {
             console.log("点击了答案", answer.answer);
             submitAnswer(quez_data.quez.id, answer.id, answer.score).then((result) => {
-                //  将text-panel的所有内部html都清空，也就是删除那些子组件   <a-entity id="text-panel" position="0 7 -4"> </a-entity>
-                panel.innerHTML = "";
+                //  将text-panel的所有内部html都清空，也就是删除那些子组件
                 sourceEl.emit('taskcompleted'); // 触发任务完成事件，将删除该组件
             });
         });
