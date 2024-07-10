@@ -1,5 +1,5 @@
 export class InteractionManager {
-  constructor(debug = true) {
+  constructor(debug = false) {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.interactiveObjects = [];
@@ -46,18 +46,19 @@ export class InteractionManager {
     const intersects = this.raycaster.intersectObjects(this.interactiveObjects.map(item => item.object), true);
     if (intersects.length > 0) {
       if (this.debug) {
-        console.log("Intersected objects:", intersects.map(intersect => intersect.object.name),intersects);
+        console.log("Intersected objects:", intersects.map(intersect => intersect.object.name), intersects);
       }
-      
+
       // 根据优先级排序
       intersects.sort((a, b) => b.object.userData.priority - a.object.userData.priority);
-      
+
       for (let intersect of intersects) {
         let highestPriorityObject = intersect.object;
+        if (highestPriorityObject.visible === false) continue; // 忽略不可见对象
         const distance = intersect.distance;
         while (!highestPriorityObject.userData.interactionRange && highestPriorityObject.parent) {
           highestPriorityObject = highestPriorityObject.parent;
-        }
+        } // 遍历父级直到找到有交互范围(及优先级)的对象
         // 检查距离是否在交互范围内
         const interactionRange = highestPriorityObject.userData.interactionRange;
         let withinRange = false;

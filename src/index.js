@@ -6,6 +6,8 @@ import './components/aframe-keyboard-controll-controller';
 import './components/aframe-log-all-events';
 import './components/aframe-look-at-component';
 import './components/aframe-focus-on-click-component';
+import './components/aframe-task-complete-component';
+import * as TWEEN from '@tweenjs/tween.js';
 // import './components/aframe-proxy-event-component'; // 这个组件的事件代理会emit一个customEvent，不利于代码编写
 import { initRecordingAndLogout } from './utils/recording';
 import { fetchData, submitAnswer, textAnimation, changeColor, quezData as localQuezData, isLogined, initUserAuth, shuffle } from './utils/utils';
@@ -55,6 +57,7 @@ function initSceneListener() {
 function allScenesClickListenerInit() {
     secondSceneListenerInit();
     thirdSceneListenerInit();
+    forthSceneListenerInit();
     textPanelListenerInit();
 }
 
@@ -67,7 +70,7 @@ function textPanelListenerInit() {
         if (textEl) {
             let parts = nextEl.split("answer");
             let index = parseInt(parts[1], 10) + 1;
-            let text =shuffledAnswers[index - 1].answer; // shuffledAnswers是一个全局变量，每次获取题目都会更新
+            let text = shuffledAnswers[index - 1].answer; // shuffledAnswers是一个全局变量，每次获取题目都会更新
             let nextTarget = ""; // 下一个目标
             if (index < answersLength) nextTarget = "answer" + index;
             textEl.setAttribute('text-animation', {
@@ -80,7 +83,7 @@ function textPanelListenerInit() {
 }
 
 function getAnswerText(index) {
-   return shuffledAnswers[index - 1].answer
+    return shuffledAnswers[index - 1].answer
 }
 
 function allScenesEnter() {
@@ -114,7 +117,7 @@ function secondSceneListenerInit() {
                 else {
                     quez_data = localQuezData;
                 }
-                createText(quez_data);
+                createText(quez_data, scene2);
             }, 'high', { min_distance: 0, max_distance: 5 });
         }
     });
@@ -125,13 +128,17 @@ function thirdSceneListenerInit() {
     let scene3 = document.getElementById('scene3');
     // console.log('场景3 加载完成');
     scene3.addEventListener('model-loaded', function () {
-        let paper = scene3.object3D.getObjectByName('y校');
+        let paper = scene3.object3D.getObjectByName('页2');
         if (paper) {
-            console.log('存在交互3 物体：y校')
+            // console.log('存在交互3 物体：y校')
             paper.userData.clickable = true;
-            // TODO 考虑实现“撕”这个动作
+
             interactionManager.registerObject(paper, async () => {
-                paper.setAttribute('visible', 'false');
+                // paper.setAttribute('visible', 'false');
+                paper.visible = false;
+                // scene3.object3D.getObjectByName('页3').visible=false;
+                scene3.object3D.getObjectByName('y校').visible = false;
+                scene3.object3D.getObjectByName('目标').visible = false;
                 console.log('按钮交互3被点击');
                 if (!USE_LOCAL_DATA) {
                     quez_data = await fetchData(3);
@@ -139,7 +146,7 @@ function thirdSceneListenerInit() {
                 else {
                     quez_data = localQuezData;
                 }
-                createText(quez_data);
+                createText(quez_data, scene3);
             }, 'high', { min_distance: 0, max_distance: 5 })
         } else {
             console.log('没有找到交互3按钮');
@@ -147,12 +154,54 @@ function thirdSceneListenerInit() {
     });
 }
 
-function createText(quez_data) {
+function forthSceneListenerInit() {
+    let scene4 = document.getElementById('scene4');
+    scene4.addEventListener('model-loaded', function () {
+        let centerPhoto = scene4.object3D.getObjectByName('交互4');
+        if (centerPhoto) {
+            console.log("找到交互4按钮");
+            centerPhoto.userData.clickable = true;
+            interactionManager.registerObject(centerPhoto, async () => {
+                console.log('按钮交互4被点击');
+                // 006左下，008右下，007中下，
+                const photos = ['立方体', '立方体001', '立方体004', '立方体005', '立方体008', '立方体007', '立方体006', '立方体003', '交互4',]
+                photos.forEach((photoName, index) => {
+                    const photoEl = scene4.object3D.getObjectByName(`${photoName}`);
+                    if (photoEl) {
+                      // 不是a-entity，无法使用setAttribute内置动画
+                        setTimeout(() => {
+                            new TWEEN.Tween(photoEl.rotation)
+                            .to({ y: photoEl.rotation.y + Math.PI }, 1000) // 旋转180度
+                            .easing(TWEEN.Easing.Quadratic.InOut)
+                            .start();
+                        }, index * 200);
+                    }
+                    else {
+                        console.log(`没有找到${photoName}照片`);
+                    }
+                });
+                function animate(time) {
+                    requestAnimationFrame(animate);
+                    TWEEN.update(time);
+                  }
+                animate();
+                if (!USE_LOCAL_DATA) {
+                    quez_data = await fetchData(4);
+                }
+                else {
+                    quez_data = localQuezData;
+                }
+                createText(quez_data, scene4);
+            }, 'high', { min_distance: 0, max_distance: 5 });
+        }
+    });
+}
+
+
+function createText(quez_data, sourceEl) {
     const panel = document.getElementById('text-panel');
     answersLength = quez_data.answers.length;
-    // console.log("answersLength", answersLength);
     shuffledAnswers = shuffle(quez_data.answers.slice()); // 打乱答案顺序
-    // console.log("shuffledAnswers", shuffledAnswers);
     const questionText = document.createElement('a-entity');
     questionText.id = "question";
     questionText.setAttribute('text-animation', { text: quez_data.quez.question, charsPerLine: 20, color: '#FFF', font: '#myFont', _function: 'textAnimation', signalTarget: "answer0", childID: "questionChar" });// 当问题展示完毕后，发送信号给第一个答案
@@ -162,7 +211,6 @@ function createText(quez_data) {
         const answerText = document.createElement('a-entity');
         answerText.id = "answer" + index;
         panel.appendChild(answerText);
-        // answerText.isAnimating = false;  
         answerText.setAttribute("background", { color: "#000" });
         // 点击答案区域的话，发送选中答案给后端
         answerText.addEventListener('click', () => {
@@ -170,6 +218,7 @@ function createText(quez_data) {
             submitAnswer(quez_data.quez.id, answer.id, answer.score).then((result) => {
                 //  将text-panel的所有内部html都清空，也就是删除那些子组件   <a-entity id="text-panel" position="0 7 -4"> </a-entity>
                 panel.innerHTML = "";
+                sourceEl.emit('taskcompleted'); // 触发任务完成事件，将删除该组件
             });
         });
     });

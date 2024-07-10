@@ -14,7 +14,7 @@ AFRAME.registerComponent('focus-on-click', {
         const cameraPos = cameraObj.position;
         const targetPos = el.object3D.position;
         const distance = cameraPos.distanceTo(targetPos);
-        console.log(`Distance: ${distance}, Target: ${targetPos.x}, ${targetPos.y}, ${targetPos.z}, cameraPos: ${cameraPos.x}, ${cameraPos.y}, ${cameraPos.z}`);
+        // console.log(`Distance: ${distance}, Target: ${targetPos.x}, ${targetPos.y}, ${targetPos.z}, cameraPos: ${cameraPos.x}, ${cameraPos.y}, ${cameraPos.z}`);
         let newTargetPos;
         if (data.moveRelativeTo === 'camera') {
           // 根据相机当前角度计算目标位置
