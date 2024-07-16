@@ -1,6 +1,7 @@
 import { initApplication } from "../index";
 import { backendhost, backendLoginUrl, backendQuezUrl, frontendhost } from "../config";
 import wretch from "wretch";
+import FormUrlAddon from "wretch/addons/formUrl"
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
@@ -129,10 +130,12 @@ export async function submitAnswer(quez_id, answer_id, score = 0) {
     try {
         const data = await wretch(`http://localhost:8000/choice/${quez_id}`)
             .auth(`Bearer ${token}`)
-            .put({
+            .addon(FormUrlAddon)
+            .formUrl({
                 answer_id: answer_id,
                 score: score
             })
+            .put()
             .json();
 
         console.log('Answer submitted successfully:', data);

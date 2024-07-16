@@ -57,8 +57,6 @@ export function thirdSceneListenerInit() {
                 }
                 createText(quez_data, scene3);
             }, 'high', { min_distance: 0, max_distance: 5 });
-        } else {
-            console.log('没有找到交互3按钮');
         }
     }
 
@@ -137,7 +135,23 @@ export function fifthSceneListenerInit() {
             interactLine.userData.clickable = true;
             interactionManager.registerObject(interactLine, async () => {
                 console.log('按钮交互5被点击');
-                
+                scene5.object3D.getObjectByName('球体5_6').visible = false;
+                // 让scene5产生向上移动的动画
+
+                scene5.setAttribute('material', { opacity: 1, transparent: true });
+                let position = scene5.getAttribute('position');
+                scene5.setAttribute('animation__position', {
+                    property: 'position',
+                    to: `${position.x} ${position.y + 10} ${position.z}`,
+                    dur: 12000,
+                    easing: 'linear'
+                });
+                scene5.setAttribute('animation__opacity', {
+                    property: 'material.opacity',
+                    to: 0,
+                    dur: 12000,
+                    easing: 'linear'
+                });
                 if (!USE_LOCAL_DATA) {
                     quez_data = await fetchData(5);
                 }
@@ -146,13 +160,17 @@ export function fifthSceneListenerInit() {
                 }
                 createText(quez_data, scene5);
             }, 'high', { min_distance: 0, max_distance: 5 });
+        } else {
+            console.log('没有找到交互5_6');
         }
     }
     const model = scene5.getObject3D('mesh');
     if (model) {
+        console.log('场景5的模型已加载');
         handleModelLoaded(model);
     } else {
-        scene11.addEventListener('model-loaded', function (e) {
+        console.log('场景5的模型未加载');
+        scene5.addEventListener('model-loaded', function (e) {
             handleModelLoaded(e.detail.model);
         });
     }

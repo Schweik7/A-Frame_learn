@@ -13,12 +13,13 @@ AFRAME.registerComponent('text-animation', {
     height: { type: 'number', default: 0.05 },
     signalTarget: { type: 'string', default: '' },
     childID: { type: 'string', default: 'child' },
+    _function: { type:'string', default: '' },
   },
   init: function () {
     let data = this.data;
     const el = this.el;
     const functionName = data._function;
-    delete this._function;
+    // delete this._function;
     const characters = data.text.split('');
     let currentLine = 0;
     let charLineIndex = 0;

@@ -12,7 +12,7 @@ import './components/animation-mixer.js';
 import { initRecordingAndLogout } from './utils/recording';
 import { submitAnswer, textAnimation, changeColor, isLogined, initUserAuth, shuffle } from './utils/utils';
 import { InteractionManager } from './utils/interactionManager'
-import { secondSceneListenerInit, thirdSceneListenerInit, forthSceneListenerInit } from './depressionType1';
+import { secondSceneListenerInit, thirdSceneListenerInit, forthSceneListenerInit,fifthSceneListenerInit } from './depressionType1';
 import { eleventhSceneListenerInit, twelfthSceneListenerInit, thirteenthSceneListenerInit, fourteenthSceneListenerInit } from './depressionType2';
 
 let loadedScene = false;
@@ -58,10 +58,13 @@ function allScenesClickListenerInit() {
     secondSceneListenerInit();
     thirdSceneListenerInit();
     forthSceneListenerInit();
+    fifthSceneListenerInit();
+
     eleventhSceneListenerInit();
     twelfthSceneListenerInit();
     thirteenthSceneListenerInit();
     fourteenthSceneListenerInit();
+
     textPanelListenerInit();
 }
 
@@ -135,13 +138,16 @@ export function createText(quez_data, sourceEl) {
         const answerText = document.createElement('a-entity');
         answerText.id = "answer" + index;
         panel.appendChild(answerText);
-        answerText.setAttribute("background", { color: "#000" });
+        // answerText.setAttribute("background", { color: "#000" });
+        // 在Aframe1.6中，Component `background` can only be applied to <a-scene>
         // 点击答案区域的话，发送选中答案给后端
         answerText.addEventListener('click', () => {
             console.log("点击了答案", answer.answer);
             submitAnswer(quez_data.quez.id, answer.id, answer.score).then((result) => {
                 //  将text-panel的所有内部html都清空，也就是删除那些子组件
-                sourceEl.emit('taskcompleted'); // 触发任务完成事件，将删除该组件
+                if(sourceEl) // 有可能这个模型已经被删除了
+                    sourceEl.emit('taskcompleted'); // 触发任务完成事件，将删除该组件
+                panel.innerHTML = "";
             });
         });
     });
