@@ -13,6 +13,9 @@ module.exports = {
     res:{url: '/res', static: true},
     models:{url: '/models', static: true},
   },
+  // alias: {
+  //   'animation-mixer': './components/aframe-extras/src/loaders/animation-mixer.js'
+  // },
   plugins: [
     /* ... */
   ],
