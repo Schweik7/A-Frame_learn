@@ -175,3 +175,113 @@ export function fifthSceneListenerInit() {
         });
     }
 }
+// 点击“交互7&8”，文字“风凉话”向“交互7&8”移动，移动完成出现题目
+// TODO 待完善
+export function seventhSceneListenerInit() {
+    return;
+    let scene7 = document.getElementById('scene7');
+    if (!scene7) {
+        console.log('没有找到场景7');
+        return;
+    }
+    function handleModelLoaded(model) {
+        let interactLine = scene7.object3D.getObjectByName('交互7_8');
+        if (interactLine) {
+            interactLine.userData.clickable = true;
+            interactionManager.registerObject(interactLine, async () => {
+                console.log('按钮交互7被点击');
+                scene7.object3D.getObjectByName('球体7_8').visible = false;
+                // 让scene7产生向上移动的动画
+                scene7.setAttribute('material', { opacity: 1, transparent: true });
+                let position = scene7.getAttribute('position');
+                scene7.setAttribute('animation__position', {
+                    property: 'position',
+                    to: `${position.x} ${position.y + 10} ${position.z}`,
+                    dur: 12000,
+                    easing: 'linear'
+                });
+            }, 'high', { min_distance: 0, max_distance: 5 });
+        } else {
+            console.log('没有找到交互7_8');
+        }
+    }
+    const model = scene7.getObject3D('mesh');
+    if (model) {
+        console.log('场景7的模型已加载');
+        handleModelLoaded(model);
+    } else {
+        console.log('场景7的模型未加载');
+        scene7.addEventListener('model-loaded', function (e) {
+            handleModelLoaded(e.detail.model);
+        });
+    }
+}
+
+//1.点击“交互9&101”，翻转
+// 2.点击“交互9&102”，翻转
+// 3.2个都翻转完毕出现测验题目
+
+export function ninthSceneListenerInit() {
+    let scene9 = document.getElementById('scene9');
+    if (!scene9) {
+        console.log('没有找到场景9');
+        return;
+    }
+
+    // 状态管理器
+    const clickState = {
+        'a成绩单': false,
+        '非a成绩单': false
+    };
+
+    function checkAllClicked() {
+        // 检查所有交互对象是否都已被点击
+        if (clickState['a成绩单'] && clickState['非a成绩单']) {
+            // 触发下一步操作
+            console.log('两个对象都被点击，进行下一步操作');
+            return true;
+        }
+        return false;
+    }
+
+    function handleModelLoaded(model) {
+        const names = ['a成绩单', '非a成绩单'];
+        names.forEach(name => {
+            let paper = scene9.object3D.getObjectByName(name);
+            if (paper) {
+                paper.userData.clickable = true;
+                interactionManager.registerObject(paper, async () => {
+                    setTimeout(() => {
+                        new TWEEN.Tween(paper.rotation)
+                            .to({ y: paper.rotation.y + Math.PI }, 1000) // 旋转180度
+                            .easing(TWEEN.Easing.Quadratic.InOut)
+                            .start();
+                    }, 300);
+
+                    // 更新点击状态
+                    clickState[name] = true;
+                    if (checkAllClicked()){ // 检查并执行下一步操作
+                        if (!USE_LOCAL_DATA) {
+                            quez_data = await fetchData(9);
+                        }
+                        else {
+                            quez_data = localQuezData;
+                        }
+                        createText(quez_data, scene9);
+                    } 
+                }, 'high', { min_distance: 0, max_distance: 5 });
+            }
+        });
+    }
+
+    const model = scene9.getObject3D('mesh');
+    if (model) {
+        console.log('场景9的模型已加载');
+        handleModelLoaded(model);
+    } else {
+        console.log('场景9的模型未加载');
+        scene9.addEventListener('model-loaded', function (e) {
+            handleModelLoaded(e.detail.model);
+        });
+    }
+}

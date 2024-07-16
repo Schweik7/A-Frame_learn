@@ -12,7 +12,7 @@ import './components/animation-mixer.js';
 import { initRecordingAndLogout } from './utils/recording';
 import { submitAnswer, textAnimation, changeColor, isLogined, initUserAuth, shuffle } from './utils/utils';
 import { InteractionManager } from './utils/interactionManager'
-import { secondSceneListenerInit, thirdSceneListenerInit, forthSceneListenerInit,fifthSceneListenerInit } from './depressionType1';
+import { secondSceneListenerInit, thirdSceneListenerInit, forthSceneListenerInit,fifthSceneListenerInit,ninthSceneListenerInit,seventhSceneListenerInit} from './depressionType1';
 import { eleventhSceneListenerInit, twelfthSceneListenerInit, thirteenthSceneListenerInit, fourteenthSceneListenerInit } from './depressionType2';
 
 let loadedScene = false;
@@ -20,7 +20,7 @@ let shuffledAnswers = null;
 let answersLength = null;
 window.originalPositions = {};
 window.textAnimation = textAnimation;
-
+const sceneShown=[5,6,7,8,9,10] //控制哪些场景需要被展示 
 
 export async function initApplication() {
     if (!loadedScene) {
@@ -59,7 +59,9 @@ function allScenesClickListenerInit() {
     thirdSceneListenerInit();
     forthSceneListenerInit();
     fifthSceneListenerInit();
-
+    seventhSceneListenerInit();
+    ninthSceneListenerInit();
+    
     eleventhSceneListenerInit();
     twelfthSceneListenerInit();
     thirteenthSceneListenerInit();
@@ -111,7 +113,7 @@ function allScenesVisible() {
     //     }
     // }
 
-    const sceneShown=[5,6,7,8] //控制哪些场景需要被展示 
+
     for (let i = 0; i < sceneShown.length; i++) {
         let index = sceneShown[i];
         curScene = document.getElementById(`scene${index}`);
