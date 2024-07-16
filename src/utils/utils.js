@@ -1,5 +1,6 @@
 import { initApplication } from "../index";
-import { backendhost, backendLoginUrl, backendQuezUrl,frontendhost } from "../config";
+import { backendhost, backendLoginUrl, backendQuezUrl, frontendhost } from "../config";
+import wretch from "wretch";
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
@@ -34,23 +35,14 @@ export function isLogined() {
 
 export async function login(username, password = "DSTTest") {
     try {
-        const response = await fetch(backendLoginUrl, {
-            method: 'POST',
-            headers: {
-                "Accept": "*/*",
-                "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
+        const data = await wretch(backendLoginUrl)
+            .post({
                 username: `${username}@example.com`,
                 password
-            }).toString(),
-            mode:'cors'
-        });
+            })
+            .json();
 
-        const data = await response.json();
-
-        if (response.ok) {
+        if (data.access_token) {
             return data.access_token;
         } else {
             if (data.detail === "LOGIN_BAD_CREDENTIALS") {
@@ -66,47 +58,88 @@ export async function login(username, password = "DSTTest") {
         console.error('Login failed:', error);
     }
 }
+
 export async function logout() {
     const authToken = localStorage.getItem('authToken');
-    let headersList = {
-        "Accept": "*/*",
-        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-        "Authorization": `Bearer ${authToken}`
-    }
-    let response = await fetch(`${backendhost}/auth/jwt/logout`, {
-        method: "post",
-        headers: headersList
-    });
-    console.log(response);
-    if (response.ok) {
-        localStorage.removeItem('authToken');
-        return true;
-    } else {
-        console.error('Failed to logout:', response);
+    try {
+        const response = await wretch(`${backendhost}/auth/jwt/logout`)
+            .auth(`Bearer ${authToken}`)
+            .post()
+            .res();
+
+        if (response.ok) {
+            localStorage.removeItem('authToken');
+            return true;
+        } else {
+            console.error('Failed to logout:', response);
+            localStorage.removeItem('authToken');
+            return false;
+        }
+    } catch (error) {
+        console.error('Failed to logout:', error);
         localStorage.removeItem('authToken');
         return false;
     }
 }
 
 export async function fetchData(quezID = 1) {
+    const authToken = localStorage.getItem('authToken');
     try {
-        const authToken = localStorage.getItem('authToken');
-        let headersList = {
-            "Accept": "*/*",
-            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-            "Authorization": `Bearer ${authToken}`
-        }
-
-        let response = await fetch(`${backendQuezUrl}/${quezID}`, {
-            method: "GET",
-            headers: headersList
-        });
-
-        let data = await response.json();
+        const data = await wretch(`${backendQuezUrl}/${quezID}`)
+            .auth(`Bearer ${authToken}`)
+            .get()
+            .json();
         return data;
-
     } catch (error) {
         console.error('Failed to fetch data:', error);
+    }
+}
+
+export async function register(username, password = "DSTTest") {
+    try {
+        const data = await wretch(`${backendhost}/auth/register`)
+            .post({
+                email: `${username}@example.com`,
+                password,
+                is_active: true,
+                is_superuser: false,
+                is_verified: false
+            })
+            .json();
+
+        if (data.detail) {
+            console.error('Registration failed:', data.detail);
+            return false;
+        } else {
+            console.log('Registration success:', data);
+            return true;
+        }
+    } catch (error) {
+        console.error('Registration failed:', error);
+    }
+}
+
+export async function submitAnswer(quez_id, answer_id, score = 0) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        console.error('No auth token found');
+        throw new Error('No auth token found');
+    }
+
+    try {
+        const data = await wretch(`http://localhost:8000/choice/${quez_id}`)
+            .auth(`Bearer ${token}`)
+            .put({
+                answer_id: answer_id,
+                score: score
+            })
+            .json();
+
+        console.log('Answer submitted successfully:', data);
+        return data;
+    } catch (error) {
+        console.error('Error submitting answer:', error);
+        throw error;
     }
 }
 
@@ -136,36 +169,6 @@ export function initUserAuth() {
         initApplication();
     }
 }
-
-export async function register(username, password = "DSTTest") {
-    try {
-        const response = await fetch(`${backendhost}/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: `${username}@example.com`,
-                password,
-                is_active: true,
-                is_superuser: false,
-                is_verified: false
-            })
-        });
-        const data = await response.json();
-        if (!response.ok) { //状态码在 200-299 范围内；创建成功将返回201
-            console.error('Registration failed:', data.detail);
-        }
-        else {
-            console.log('Registration success:', data);
-            return true;
-        }
-    } catch (error) {
-        console.error('Registration failed:', error.JSON);
-    }
-}
-
-
 
 export function textAnimation(textEl, index, curPosition, data, charLineIndex, currentLine, oriPosition) {
     const baseDelay = 500; // 基础延迟
@@ -207,39 +210,4 @@ export function shuffle(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-}
-
-export async function submitAnswer(quez_id, answer_id,score) {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        console.error('No auth token found');
-        throw new Error('No auth token found');
-    }
-
-    try {
-        const response = await fetch(`http://localhost:8000/choice/${quez_id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${token}`
-            },
-            body: new URLSearchParams({
-                answer_id: answer_id,
-                score: score // 假设这里的score是0，你可以根据需求更改
-            })
-        });
-        // console.log("submitAnswer",quez_id,answer_id,score);
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Answer submitted successfully:', data);
-            return data;
-        } else {
-            const errorData = await response.json();
-            console.error('Failed to submit answer:', errorData);
-            throw new Error(errorData.detail);
-        }
-    } catch (error) {
-        console.error('Error submitting answer:', error);
-        throw error;
-    }
 }
