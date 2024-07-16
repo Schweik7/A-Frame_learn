@@ -92,19 +92,28 @@ function getAnswerText(index) {
 
 function allScenesVisible() {
     main_scene.setAttribute('visible', 'false');
-    const typeShownFlag=[false,true,false,false,false,false];
-    const scenesIndex=[[1,2,3,4,5,6,7,8,9,10],[11,12,13,14],[15,16,17,18,19],[20,21,22,23,24,25,26,27,28],[29,30,31,32,33,34],[35,36,37,38,39,40]]; //一共有六种 1-10,11-14,15-19,20-28,29-34,35-40
-
     let curScene = null;
-    for (let i = 0; i < scenesIndex.length; i++) {
-        if (!typeShownFlag[i]) continue;
-        let sceneIndex = scenesIndex[i];
-        for (let j = 0; j < sceneIndex.length; j++) {
-            let index = sceneIndex[j];
-            curScene = document.getElementById(`scene${index}`);
-            if (curScene) {
-                curScene.setAttribute('visible', 'true');
-            }
+
+    // const typeShownFlag=[false,true,false,false,false,false];
+    // const scenesIndex=[[1,2,3,4,5,6,7,8,9,10],[11,12,13,14],[15,16,17,18,19],[20,21,22,23,24,25,26,27,28],[29,30,31,32,33,34],[35,36,37,38,39,40]]; //一共有六种 1-10,11-14,15-19,20-28,29-34,35-40
+    // for (let i = 0; i < scenesIndex.length; i++) {
+    //     if (!typeShownFlag[i]) continue;
+    //     let sceneIndex = scenesIndex[i];
+    //     for (let j = 0; j < sceneIndex.length; j++) {
+    //         let index = sceneIndex[j];
+    //         curScene = document.getElementById(`scene${index}`);
+    //         if (curScene) {
+    //             curScene.setAttribute('visible', 'true');
+    //         }
+    //     }
+    // }
+
+    const sceneShown=[5,6,7,8] //控制哪些场景需要被展示 
+    for (let i = 0; i < sceneShown.length; i++) {
+        let index = sceneShown[i];
+        curScene = document.getElementById(`scene${index}`);
+        if (curScene) {
+            curScene.setAttribute('visible', 'true');
         }
     }
 

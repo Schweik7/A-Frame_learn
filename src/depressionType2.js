@@ -29,6 +29,7 @@ export function eleventhSceneListenerInit() {
                 pushButton.material.opacity = 0.3;
                 const animationMixer = scene11.components['animation-mixer'];
                 if (animationMixer) {
+                    animationMixer.data.timeScale = 1;
                     animationMixer.playAction();
                 }
                 if (!USE_LOCAL_DATA) {
@@ -43,7 +44,7 @@ export function eleventhSceneListenerInit() {
         }
     };
 
-    // 检查模型是否已经加载
+    // 检查模型是否已经加载，如加载则处理，否则监听事件
     const model = scene11.getObject3D('mesh');
     if (model) {
         handleModelLoaded(model);
