@@ -1,7 +1,9 @@
-import { initApplication } from "../index";
+import { initApplication, createText } from "../index";
 import { backendhost, backendLoginUrl, backendQuezUrl, frontendhost } from "../config";
 import wretch from "wretch";
-import FormUrlAddon from "wretch/addons/formUrl"
+import FormUrlAddon from "wretch/addons/formUrl";
+import { USE_LOCAL_DATA } from '../config';
+
 let hoveredAnswer = null;
 export let quezData = {
     "quez": {
@@ -213,4 +215,40 @@ export function shuffle(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+
+
+export function initializeSceneListener(sceneId, objectName, interactionCallback) {
+    let quez_data = null;
+    let curScene = document.getElementById(sceneId);
+    if (!curScene) {
+        console.log(`没有找到场景${sceneId}`);
+        return;
+    }
+
+    function handleModelLoaded(model) {
+        let interactionObject = curScene.object3D.getObjectByName(objectName);
+        if (interactionObject) {
+            interactionObject.userData.clickable = true;
+            interactionManager.registerObject(interactionObject, async () => {
+                if (!USE_LOCAL_DATA) {
+                    quez_data = await fetchData(parseInt(sceneId.replace('scene', '')));
+                } else {
+                    quez_data = quezData;
+                }
+                interactionCallback(interactionObject, curScene);
+                createText(quez_data, curScene);
+            }, 'high', { min_distance: 0, max_distance: 5 });
+        }
+    }
+
+    const model = curScene.getObject3D('mesh');
+    if (model) {
+        handleModelLoaded(model);
+    } else {
+        curScene.addEventListener('model-loaded', function (e) {
+            handleModelLoaded(e.detail.model);
+        });
+    }
 }

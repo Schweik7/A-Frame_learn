@@ -20,7 +20,7 @@ let shuffledAnswers = null;
 let answersLength = null;
 window.originalPositions = {};
 window.textAnimation = textAnimation;
-const sceneShown=[5,6,7,8,9,10] //控制哪些场景需要被展示 
+const sceneShown=[4,5,6,7,8,9,10] //控制哪些场景需要被展示 
 
 export async function initApplication() {
     if (!loadedScene) {
