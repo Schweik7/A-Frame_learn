@@ -20,7 +20,11 @@ let shuffledAnswers = null;
 let answersLength = null;
 window.originalPositions = {};
 window.textAnimation = textAnimation;
-const sceneShown=[4,5,6,7,8,9,10] //控制哪些场景需要被展示 
+let currentSceneIndex = 0; // 当前显示的场景索引
+let sceneShown=[] //控制哪些场景需要被展示 
+for(let i=1;i<=40;i++){
+    sceneShown.push(i)
+}
 
 export async function initApplication() {
     if (!loadedScene) {
@@ -46,7 +50,7 @@ function initSceneListener() {
         let boat_flag = main_scene.object3D.getObjectByName('旗帜');
         if (boat_flag) {
             boat_flag.userData.clickable = true;
-            interactionManager.registerObject(boat_flag, allScenesVisible);
+            interactionManager.registerObject(boat_flag, showNextScene);
             allScenesClickListenerInit();
         } else {
             console.log('没有找到boat flag');
@@ -91,41 +95,26 @@ function textPanelListenerInit() {
     });
 }
 
-function getAnswerText(index) {
-    return shuffledAnswers[index - 1].answer
-}
-
-function allScenesVisible() {
+function showNextScene() {
+    let main_scene = document.getElementById('main_scene');
     main_scene.setAttribute('visible', 'false');
-    let curScene = null;
 
-    // const typeShownFlag=[false,true,false,false,false,false];
-    // const scenesIndex=[[1,2,3,4,5,6,7,8,9,10],[11,12,13,14],[15,16,17,18,19],[20,21,22,23,24,25,26,27,28],[29,30,31,32,33,34],[35,36,37,38,39,40]]; //一共有六种 1-10,11-14,15-19,20-28,29-34,35-40
-    // for (let i = 0; i < scenesIndex.length; i++) {
-    //     if (!typeShownFlag[i]) continue;
-    //     let sceneIndex = scenesIndex[i];
-    //     for (let j = 0; j < sceneIndex.length; j++) {
-    //         let index = sceneIndex[j];
-    //         curScene = document.getElementById(`scene${index}`);
-    //         if (curScene) {
-    //             curScene.setAttribute('visible', 'true');
-    //         }
-    //     }
-    // }
-
-
-    for (let i = 0; i < sceneShown.length; i++) {
-        let index = sceneShown[i];
-        curScene = document.getElementById(`scene${index}`);
-        if (curScene) {
-            curScene.setAttribute('visible', 'true');
-        }
+    if (currentSceneIndex >= sceneShown.length) {
+        console.log('所有场景都展示完毕');
+        return;
+    };
+    currentSceneIndex++;
+    let nextSceneIndex = sceneShown[currentSceneIndex];
+    let curScene = document.getElementById(`scene${nextSceneIndex}`);
+    if (curScene && curScene.getObject3D('mesh')) { // 场景存在，模型已加载
+        console.log(`展示场景${nextSceneIndex}`);
+        curScene.setAttribute('visible', 'true');
     }
-
-    let boat_flag = main_scene.object3D.getObjectByName('旗帜');
-    interactionManager.unregisterObject(boat_flag)
+    else {
+        console.log(`场景${nextSceneIndex}不存在`);
+        showNextScene();
+    }
 }
-
 
 export function createText(quez_data, sourceEl) {
     const panel = document.getElementById('text-panel');
@@ -150,6 +139,7 @@ export function createText(quez_data, sourceEl) {
                 if(sourceEl) // 有可能这个模型已经被删除了
                     sourceEl.emit('taskcompleted'); // 触发任务完成事件，将删除该组件
                 panel.innerHTML = "";
+                showNextScene(); // 展示下一个场景
             });
         });
     });
