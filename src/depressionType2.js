@@ -1,8 +1,5 @@
 import * as TWEEN from '@tweenjs/tween.js';
-import { fetchData, quezData as localQuezData,initializeSceneListener} from './utils/utils';
-import { USE_LOCAL_DATA } from './config';
-import { createText } from '.';
-let quez_data = null;
+import {initializeSceneListener} from './utils/utils';
 
 
 export function eleventhSceneListenerInit() {
