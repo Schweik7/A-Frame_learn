@@ -139,8 +139,6 @@ export async function submitAnswer(quez_id, answer_id, score = 0) {
             })
             .put()
             .json();
-
-        console.log('Answer submitted successfully:', data);
         return data;
     } catch (error) {
         console.error('Error submitting answer:', error);
